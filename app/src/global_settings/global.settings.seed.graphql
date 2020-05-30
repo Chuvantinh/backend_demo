@@ -1,0 +1,344 @@
+# Content of './global.config.ts' as gql mutation
+# execute this mutation after first initialization of server
+
+# Time Spans as Specified
+mutation createglobalConfigSpecs {
+  createGlobalSettings(
+    data: {
+      matchingPercentageCap: 70
+      matchingTimeout: {
+        create: { hours: 48, days: 0, minutes: 0, seconds: 0 }
+      }
+      defaultActivityTimeMinutesPerWeek: 150
+      minimumActivityTimeMinutes: 10
+      maximumActivityTimeMinutes: 240
+      ipaqGroupLowMax: 360
+      ipaqGroupModerateMax: 3600
+      ipaqGroupHighMax: 3600
+      phqGroupLowMin: 10
+      phqGroupLowMax: 18
+      botSettings: {
+        create: {
+          botFirstGreetingText: "Hey, ich bin euer RobBot und versuche euch am Anfang ein wenig zu Unterstützern. Schön das ihr euch hier gefunden habt. Stellt euch kurz vor wer ihr seid und was eure Ziele sind. Ob ihr gerade Lust auf viele Aktivitäten habt und vielleicht auf welche"
+          botFirstGreetingTextDelay: {
+            create: { hours: 0, days: 0, minutes: 0, seconds: 10 }
+          }
+          botAskCreateActivitiesTime: {
+            create: { hours: 0, days: 0, minutes: 6, seconds: 0 }
+          }
+          botAskCreateActivitiesMessage: "Es ist schön das ihr euch nun ein wenig besser kennenlernt. Es wäre schön wenn ihr nun zunächst einmal ein paar Aktivitäten in euren Kalender."
+          botAskStartChatIntervall: {
+            create: { hours: 0, days: 8, minutes: 0, seconds: 0 }
+          }
+          botAskStartChatMessage: "Hey ihr hab euch seit mehr als einer Woche nicht mehr geschrieben. Wie geht’s euch und euren Plänen?"
+          botActivityLessThanPlannedMessage: "Falls ihr eure Aktiven Minuten noch nicht erreicht habt sprecht doch darüber was ihr noch im Kalender hinzufügen könnt"
+          botActivityLessThanPlannedWeekday: 4
+        }
+      }
+      webPushSettings: {
+        create: {
+          # Quests
+          webPushIpaqReminderMessage: "Bitte PHQ-9 Fragebogen ausfüllen"
+          webPushIpaqReminderIntervall: {
+            create: { days: 14, hours: 0, minutes: 0, seconds: 0 }
+          }
+          webPushIpaqReminderIntervallFollowUp: {
+            create: { days: 0, hours: 23, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderMessage: "Bitte IPAQ Fragebogen ausfüllen"
+          webPushPhqReminderIntervall: {
+            create: { days: 14, hours: 0, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderIntervallFollowUp: {
+            create: { days: 0, hours: 23, minutes: 0, seconds: 0 }
+          }
+          ## Matching
+          # incoming buddy request
+          webPushIncomingBuddyRequestMessage: "You have got a Buddy Request"
+          webPushIncomingBuddyRequestDelay: {
+            create: { days: 0, hours: 0, minutes: 0, seconds: 2 }
+          }
+          # incoming buddy request no response
+          webPushIncomingRequestNoResponseMessage: "Please answer to buddies matching request"
+          webPushIncomingRequestNoResponseIntervall: {
+            create: { days: 0, hours: 24, minutes: 0, seconds: 0 }
+          }
+          webPushIncomingRequestNoResponseFollowupIntervall: {
+            create: { days: 0, hours: 46, minutes: 0, seconds: 0 }
+          }
+          # buddy request was not answered
+          webPushIncomingRequestNotAnsweredMessage: "Ihre Anfrag blieb leider unbeantowrtet"
+          webPushIncomingRequestNotAnsweredIntervall: {
+            create: { days: 0, hours: 48, minutes: 0, seconds: 0 }
+          }
+          ## Activities
+          # activity not enough planned - to user
+          webPushNotEnoughActivitiesMessage: "Bitte Aktivitäten Planen"
+          # Sunday = 0 => Thursday = 4
+          webPushNotEnoughActivitiesWeekday: 4
+          # activity not enough planned - to buddy
+          webPushNotEnoughActivitiesBuddyMessage: "your buddy have less active minutes than he planned, please check on your buddy"
+          # Fridays => 5
+          webPushNotEnoughActivitiesBuddyWeekday: 5
+          # activity to much planned - to user
+          webPushToManyActivitiesMessage: "Please pay attention on your active minutes, you planned more active minutes than you wanted"
+          # Fridays = 5
+          webPushToManyActivitiesWeekday: 5
+          # activity to much planned - to buddy
+          webPushToManyActivitiesBuddyMessage: "Please pay attention to your buddies schedule he planned more activities than he wanted in the beginning"
+          webPushToManyActivitiesBuddyDelay: {
+            create: { days: 2, hours: 0, minutes: 0, seconds: 0 }
+          }
+          # TODO this probably needs a time of day setting
+          # activity missed - to buddy
+          webPushActivityMissedBuddyMessage: "your buddy have missed his planned activity, please give support to your buddy"
+          webPushActivityMissedBuddyDelay: {
+            create: { hours: 23, days: 0, minutes: 50, seconds: 0 }
+          }
+        }
+      }
+    }
+  ) {
+    id
+  }
+}
+
+# shorter timespans for testing
+mutation createGlobalConfigDev {
+  createGlobalSettings(
+    data: {
+      matchingPercentageCap: 70
+      matchingTimeout: { create: { hours: 0, days: 0, minutes: 2, seconds: 0 } }
+      defaultActivityTimeMinutesPerWeek: 150
+      minimumActivityTimeMinutes: 10
+      maximumActivityTimeMinutes: 240
+      ipaqGroupLowMax: 360
+      ipaqGroupModerateMax: 3600
+      ipaqGroupHighMax: 3600
+      phqGroupLowMin: 10
+      phqGroupLowMax: 18
+      botSettings: {
+        create: {
+          botFirstGreetingText: "Hey, ich bin euer RobBot und versuche euch am Anfang ein wenig zu Unterstützern. Schön das ihr euch hier gefunden habt. Stellt euch kurz vor wer ihr seid und was eure Ziele sind. Ob ihr gerade Lust auf viele Aktivitäten habt und vielleicht auf welche"
+          botFirstGreetingTextDelay: {
+            create: { hours: 0, days: 0, minutes: 0, seconds: 10 }
+          }
+          botAskCreateActivitiesTime: {
+            create: { hours: 0, days: 0, minutes: 2, seconds: 0 }
+          }
+          botAskCreateActivitiesMessage: "Es ist schön das ihr euch nun ein wenig besser kennenlernt. Es wäre schön wenn ihr nun zunächst einmal ein paar Aktivitäten in euren Kalender."
+          botAskStartChatIntervall: {
+            create: { hours: 0, days: 8, minutes: 0, seconds: 0 }
+          }
+          botAskStartChatMessage: "Hey ihr hab euch seit mehr als einer Woche nicht mehr geschrieben. Wie geht’s euch und euren Plänen?"
+          botActivityLessThanPlannedMessage: "Falls ihr eure Aktiven Minuten noch nicht erreicht habt sprecht doch darüber was ihr noch im Kalender hinzufügen könnt"
+          botActivityLessThanPlannedWeekday: 4
+        }
+      }
+      webPushSettings: {
+        create: {
+          # Quests
+          webPushIpaqReminderMessage: "Bitte PHQ-9 Fragebogen ausfüllen"
+          webPushPhqReminderIntervall: {
+            create: { days: 14, hours: 0, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderIntervallFollowUp: {
+            create: { days: 0, hours: 23, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderMessage: "Bitte IPAQ Fragebogen ausfüllen"
+          ## Matching
+          # incoming buddy request
+          webPushIncomingBuddyRequestMessage: "You have got a Buddy Request"
+          webPushIncomingBuddyRequestDelay: {
+            create: { days: 0, hours: 0, minutes: 0, seconds: 2 }
+          }
+          # incoming buddy request no response
+          webPushIncomingRequestNoResponseMessage: "Please answer to buddies matching request"
+          webPushIncomingRequestNoResponseIntervall: {
+            create: { days: 0, hours: 1, minutes: 0, seconds: 0 }
+          }
+          # buddy request was not answered
+          webPushIncomingRequestNotAnsweredMessage: "Ihre Anfrag blieb leider unbeantowrtet"
+          webPushIncomingRequestNotAnsweredIntervall: {
+            create: { days: 0, hours: 2, minutes: 0, seconds: 0 }
+          }
+          ## Activities
+          # activity not enough planned - to user
+          webPushNotEnoughActivitiesMessage: "Bitte Aktivitäten Planen"
+          # Sunday = 0 => Thursday = 4
+          webPushNotEnoughActivitiesWeekday: 4
+          # activity not enough planned - to buddy
+          webPushNotEnoughActivitiesBuddyMessage: "your buddy have less active minutes than he planned, please check on your buddy"
+          # Fridays => 5
+          webPushNotEnoughActivitiesBuddyWeekday: 5
+          # activity to much planned - to user
+          webPushToManyActivitiesMessage: "Please pay attention on your active minutes, you planned more active minutes than you wanted"
+          # Fridays = 5
+          webPushToManyActivitiesWeekday: 5
+          # activity to much planned - to buddy
+          webPushToManyActivitiesBuddyMessage: "Please pay attention to your buddies schedule he planned more activities than he wanted in the beginning"
+          webPushToManyActivitiesBuddyDelay: {
+            create: { days: 0, hours: 2, minutes: 0, seconds: 0 }
+          }
+          # TODO this probalbly needs a time of day setting
+          # activity missed - to buddy
+          webPushActivityMissedBuddyMessage: "your buddy have missed his planned activity, please give support to your buddy"
+          webPushActivityMissedBuddyDelay: {
+            create: { hours: 0, days: 0, minutes: 2, seconds: 0 }
+          }
+        }
+      }
+    }
+  ) {
+    id
+  }
+}
+
+mutation updateGlobalConfig {
+  updateGlobalSettings(
+    where: { id: "ck3iwtwdr7zdz0743j5uvp3ak" }
+    data: {
+      matchingPercentageCap: 70
+      matchingTimeout: {
+        create: { hours: 48, days: 0, minutes: 0, seconds: 0 }
+      }
+      defaultActivityTimeMinutesPerWeek: 150
+      minimumActivityTimeMinutes: 10
+      maximumActivityTimeMinutes: 240
+      ipaqGroupLowMax: 360
+      ipaqGroupModerateMax: 3600
+      ipaqGroupHighMax: 3600
+      phqGroupLowMin: 10
+      phqGroupLowMax: 18
+      botSettings: {
+        update: {
+          botFirstGreetingText: "Hey, ich bin euer RobBot und versuche euch am Anfang ein wenig zu Unterstützern. Schön das ihr euch hier gefunden habt. Stellt euch kurz vor wer ihr seid und was eure Ziele sind. Ob ihr gerade Lust auf viele Aktivitäten habt und vielleicht auf welche"
+          botFirstGreetingTextDelay: {
+            create: { hours: 0, days: 0, minutes: 0, seconds: 10 }
+          }
+          botAskCreateActivitiesTime: {
+            create: { hours: 0, days: 0, minutes: 6, seconds: 0 }
+          }
+          botAskCreateActivitiesMessage: "Es ist schön das ihr euch nun ein wenig besser kennenlernt. Es wäre schön wenn ihr nun zunächst einmal ein paar Aktivitäten in euren Kalender."
+          botAskStartChatIntervall: {
+            create: { hours: 0, days: 8, minutes: 0, seconds: 0 }
+          }
+          botAskStartChatMessage: "Hey ihr hab euch seit mehr als einer Woche nicht mehr geschrieben. Wie geht’s euch und euren Plänen?"
+          botActivityLessThanPlannedMessage: "Falls ihr eure Aktiven Minuten noch nicht erreicht habt sprecht doch darüber was ihr noch im Kalender hinzufügen könnt"
+          botActivityLessThanPlannedWeekday: 4
+        }
+      }
+      webPushSettings: {
+        update: {
+          # Quests
+          webPushIpaqReminderMessage: "Bitte PHQ-9 Fragebogen ausfüllen"
+          webPushIpaqReminderIntervall: {
+            create: { days: 14, hours: 0, minutes: 0, seconds: 0 }
+          }
+          webPushIpaqReminderIntervallFollowUp: {
+            create: { days: 0, hours: 23, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderMessage: "Bitte IPAQ Fragebogen ausfüllen"
+          webPushPhqReminderIntervall: {
+            create: { days: 14, hours: 0, minutes: 0, seconds: 0 }
+          }
+          webPushPhqReminderIntervallFollowUp: {
+            create: { days: 0, hours: 23, minutes: 0, seconds: 0 }
+          }
+          ## Matching
+          # incoming buddy request
+          webPushIncomingBuddyRequestMessage: "You have got a Buddy Request"
+          webPushIncomingBuddyRequestDelay: {
+            create: { days: 0, hours: 0, minutes: 0, seconds: 2 }
+          }
+          # incoming buddy request no response
+          webPushIncomingRequestNoResponseMessage: "Please answer to buddies matching request"
+          webPushIncomingRequestNoResponseIntervall: {
+            create: { days: 0, hours: 24, minutes: 0, seconds: 0 }
+          }
+          webPushIncomingRequestNoResponseFollowupIntervall: {
+            create: { days: 0, hours: 46, minutes: 0, seconds: 0 }
+          }
+          # buddy request was not answered
+          webPushIncomingRequestNotAnsweredMessage: "Ihre Anfrag blieb leider unbeantowrtet"
+          webPushIncomingRequestNotAnsweredIntervall: {
+            create: { days: 0, hours: 48, minutes: 0, seconds: 0 }
+          }
+          ## Activities
+          # activity not enough planned - to user
+          webPushNotEnoughActivitiesMessage: "Bitte Aktivitäten Planen"
+          # Sunday = 0 => Thursday = 4
+          webPushNotEnoughActivitiesWeekday: 4
+          # activity not enough planned - to buddy
+          webPushNotEnoughActivitiesBuddyMessage: "your buddy have less active minutes than he planned, please check on your buddy"
+          # Fridays => 5
+          webPushNotEnoughActivitiesBuddyWeekday: 5
+          # activity to much planned - to user
+          webPushToManyActivitiesMessage: "Please pay attention on your active minutes, you planned more active minutes than you wanted"
+          # Fridays = 5
+          webPushToManyActivitiesWeekday: 5
+          # activity to much planned - to buddy
+          webPushToManyActivitiesBuddyMessage: "Please pay attention to your buddies schedule he planned more activities than he wanted in the beginning"
+          webPushToManyActivitiesBuddyDelay: {
+            create: { days: 2, hours: 0, minutes: 0, seconds: 0 }
+          }
+          # TODO this probalbly needs a time of day setting
+          # activity missed - to buddy
+          webPushActivityMissedBuddyMessage: "your buddy have missed his planned activity, please give support to your buddy"
+          webPushActivityMissedBuddyDelay: {
+            create: { hours: 23, days: 0, minutes: 50, seconds: 0 }
+          }
+        }
+      }
+    }
+  ) {
+    id
+  }
+}
+
+
+### Query (incomplete)
+query getSettings {
+  globalSettingses {
+    id
+    updatedAt
+    botSettings {
+      id
+      botFirstGreetingText
+      botFirstGreetingTextDelay {
+        days
+        hours
+        minutes
+        seconds
+      }
+      botAskStartChatIntervall {
+        days
+        hours
+        minutes
+        seconds
+      }
+      botAskStartChatMessage
+    }
+    webPushSettings {
+      id
+      webPushIpaqReminderMessage
+      webPushPhqReminderIntervall {
+        days
+        minutes
+        seconds
+      }
+      webPushActivityMissedBuddyDelay {
+        days
+        hours
+        minutes
+        seconds
+      }
+      webPushIpaqReminderIntervall {
+        days
+        hours
+        minutes
+        seconds
+      }
+    }
+  }
+}

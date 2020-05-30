@@ -1,0 +1,31 @@
+# The target programming language for the generated code
+language: typescript
+
+# The file path pointing to your GraphQL schema
+schema: ./src/schema/schema.graphql
+
+# Request Context Type
+context: ./src/types/context.ts:Context
+
+# Map SDL types from the GraphQL schema to TS models
+models:
+  files:
+    - ./src/types/context.ts
+    - ./src/types/customTypes.ts
+    - ./src/generated/prisma-client/index.ts
+    - ./src/generated/prisma-client/prisma-schema.ts
+    # - path: ./src/generated/prisma-client
+    #   defaultName: '${typeName}Node'
+
+
+# Generated typings for resolvers and default resolver implementations
+# Please don't edit this file but just import from here
+output: ./src/generated/graphqlgen.ts
+
+resolver-scaffolding:
+  output: ./src/generated/tmp-resolvers/
+  layout: file-per-type
+
+# CLI Error: 
+# × You have to specify endpoint name or define GRAPHQL_CONFIG_ENDPOINT_NAME environment variable
+# is a know bug see: https://github.com/Urigo/graphql-cli/issues/12

@@ -1,0 +1,21 @@
+# dokku prisma.yml config - dockerfile used to configre prisma service in production
+port: 4466
+# pgsql
+databases:
+    default:
+        connector: postgres
+        host: dokku-postgres-prisma-db
+        port: 5432
+        user: postgres
+        password: 696ba4cca2cb13ea2533966981531282
+        migrations: true
+
+# mysql connector - not used - psql is used in production
+# databases:
+#     default:
+#         connector: mysql
+#         host: dokku.mysql.prisma-mysql-db
+#         port: 33060
+#         user: mysql
+#         password: "5cdb542a7679c523"
+#         migrations: true

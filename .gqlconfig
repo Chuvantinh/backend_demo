@@ -1,0 +1,22 @@
+// config for https://github.com/Mayank1791989/gql#readme
+// and in extension https://marketplace.visualstudio.com/items?itemName=kumar-harsh.graphql-for-vscode
+// .gqlconfig (with query)
+{
+  schema: {
+    files: [
+    'app/src/generated/schema/**/*.gql',
+    'app/src/generated/schema/**/*.graphql',
+    'app/src/schema/schema.graphql',
+    'app/src/database/*.graphql',
+    ],
+  },
+  query: {
+    files: [
+      // query gql files
+      {
+        match: 'app/src/**/*.graphql',
+        parser: 'QueryParser',
+      },
+    ],
+  },
+}

@@ -1,0 +1,63 @@
+
+# First create global settings directly against DB
+# => see global.settings.seed.graphql
+
+# Seed users as logged in Admin
+mutation seedAlice {
+  createAppPatient(
+    username: "Alice"
+    verificationCode: "BuddyUser"   
+  ) {
+    id
+    createdAt
+  }
+}
+
+
+mutation seedBob {
+  createAppPatient(
+    username: "Bob"
+    verificationCode: "BuddyUser"   
+  ) {
+    id
+    createdAt
+  }
+}
+
+
+mutation seedChris {
+  createAppPatient(
+    username: "Chris"
+    verificationCode: "BuddyUser"   
+  ) {
+    id
+    createdAt
+  }
+}
+
+mutation registerAlice{
+  register(
+    username:"Alice", 
+    password:"123456",
+    verificationCode:"BuddyUser"){
+    id
+  }
+}
+
+mutation registerBob{
+  register(
+    username:"Bob", 
+    password:"123456",
+    verificationCode:"BuddyUser"){
+    id
+  }
+}
+
+mutation registerChris{
+  register(
+    username:"Chris", 
+    password:"123456",
+    verificationCode:"BuddyUser"){
+    id
+  }
+}

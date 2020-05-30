@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "dom",
+      "esnext.asynciterable"
+    ],
+    "rootDir": "src",
+    "outDir": "dist",
+    "module": "commonjs",
+    "noImplicitReturns": false,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "plugins": [
+      {
+        "name": "ts-graphql-plugin",
+        "schema": "src/generated/schema/prisma.graphql",
+        "tag": "gql"
+      },
+      {
+        "name": "@divyenduz/ts-graphql-plugin"
+      },
+    ],
+  },
+  "compileOnSave": true,
+  "include": [
+    "./src/**/*", 
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**"
+  ],
+  "tslint.exclude": [
+    "./src/generated**",
+  ]
+}

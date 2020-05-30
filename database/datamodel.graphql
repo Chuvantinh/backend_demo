@@ -1,0 +1,266 @@
+type User {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  username: String! @unique
+  password: String
+  role: UserRole! @default(value: PATIENT)
+  settings: UserSettings
+
+  # maybe admins need notifications too...
+  # TODO: this needs to be an Array to support web push to multiple Devices
+  # notificationInformation: Json # -> json string with web push infos 
+  notifications: [WebPushNotification]
+  
+  # if user is patient this relation is NOT NULL
+  patient: Patient @relation(name: "UserPatient", link: INLINE, onDelete: CASCADE)
+  
+  # Maybe needed later if more information on Admin should be stored
+  # admin: Admin @relation(name: "UserAdmin")
+
+  lastActive: DateTime
+}
+
+type WebPushNotification {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+
+  name: String!
+  notificationInformation: Json!
+}
+
+type UserSettings {
+  id: ID! @id
+  themeName: String
+}
+
+type Patient {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  verificationCode: String!
+  verified: Boolean @default(value: false)
+  profile: PatientProfileInfo @relation (name: "PatientProfile", onDelete: CASCADE)
+  
+  buddy: Buddy @relation (name: "ParentPatient", onDelete: SET_NULL, link: INLINE)
+  # buddyRequests: [BuddyRequest!]! @relation (name: "BuddyRequestFrom", onDelete: SET_NULL)
+
+  quests: Questionnaires @relation(name: "PatientQuests", link: INLINE)
+
+  online: Boolean @default(value: false) # put in Buddy?
+
+  activities: [Activity!]! @relation (name: "PatientActivites", onDelete: SET_NULL)
+  favoriteActivities: [FavoriteActivity!]! @relation (name: "PatientFavoriteActivites", onDelete: SET_NULL)
+  calendarEntries: [CalendarEntry!]! @relation (name: "PatientCalendar", onDelete: CASCADE)
+
+  # Activity goal of User
+  activeMinutesPerWeek: Int @default(value: 150)
+
+  user: User @relation(name: "UserPatient")
+}
+
+type PatientProfileInfo {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  birthday: DateTime
+  gender: Gender @default(value: DIVERSE)
+  sameGender: Boolean @default(value: false)
+  hideGender: Boolean @default(value: false)
+  meetingDesired: Boolean @default(value: false)
+  avatar: String! @default(value: "")
+  
+  #profile Activities are handled differently than calendar activities
+  profileActivities: [ProfileActivity!]! @relation (name: "PatientProfileActivites", onDelete: CASCADE)
+}
+
+
+type BuddyRequest {
+  id: ID!  @id
+  createdAt: DateTime! @createdAt
+  from: Patient!  @relation (name: "BuddyRequestFrom", onDelete: SET_NULL)
+  to: Patient  @relation (name: "BuddyRequestTo", onDelete: SET_NULL)
+  state: BuddyRequestState @default(value: SEND)
+}
+
+type Buddy {
+  id: ID!  @id
+  patient: Patient! @relation (name: "UserBuddy")
+  chat: Chat @relation (name: "ChatBuddies", onDelete: SET_NULL)
+}
+
+type Chat {
+  id: ID! @id
+  # buddies: [Buddy] @relation (name: "ChatBuddies", onDelete: SET_NULL)
+  messages: [ChatMessage!]! @relation (name: "ChatMessages", onDelete: CASCADE)
+  bot: Bot @relation (name: "ChatBot", link: INLINE)
+}
+
+type ChatMessage {
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+  chat: Chat @relation (name: "ChatMessages", onDelete: SET_NULL)
+  text: String  
+  author: User @relation (name: "SendMessage", onDelete: SET_NULL)
+  authorBot: Bot
+  attachment: ChatMessageAttachment @relation (name: "MessageAttachment", onDelete: CASCADE, link: INLINE)
+}
+
+type ChatMessageAttachment {
+  id: ID! @id
+  calendarEntry: CalendarEntry,
+  # orginal calendar entry id - needed for editing from chat
+  originalCalendarEntryId: ID,
+  # orginal calendar entry owner (user Id) - needed for editing from chat
+  ownerId: ID,
+  # messageType: AttachmentType @default(value: TEXT)
+  chatMessage: ChatMessage! @relation (name: "MessageAttachment") 
+}
+
+type Bot {
+  id: ID!  @id
+  name: String
+  chat: Chat @relation (name: "ChatBot")
+}
+
+# how to identify a task which should be canceled?
+# => some task types should only exits once
+type ScheduledTask {
+  id: ID! @id
+  updatedAt: DateTime @updatedAt
+  scheduledFor: DateTime # for restoring the task from DB
+  taskType: TaskTypes!
+  userId: ID
+  chatId: ID
+  buddyRequestId: ID
+}
+
+# type ChatBotTask {
+ # id: ID!
+ # chatId: ID!
+ # message: String
+ # sendTime: DateTime!  
+
+#   # ctx.db.createTask(task)
+#   # watch task db in subscrption?
+#   # => on sub change schedule TaskTimer?
+# }
+
+# type NotificationTask {
+#   notification: String
+# }
+
+type Questionnaires {
+  id: ID! @id
+  phq9s: [Phq9!]! @relation (name: "QuestPHQ9", onDelete: CASCADE)
+  ipaqs: [Ipaq!]! @relation (name: "QuestIPAQ", onDelete: CASCADE)
+  patient: Patient @relation(name: "PatientQuests", onDelete: SET_NULL)
+}
+
+type Phq9 {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  answers: [Int!] @scalarList(strategy: RELATION)
+  score: Int
+  isComplete: Boolean
+  expiryDate: DateTime
+  # reminder: Reminder @relation (name: "RemindPHQ9", onDelete: CASCADE)
+  quests: Questionnaires! @relation (name: "QuestPHQ9", onDelete: SET_NULL)
+}
+
+type Ipaq {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  answers: [IpaqAnswers!]!  @relation (name: "IPAQAnswers")
+  score: Float
+  expiryDate: DateTime
+  isComplete: Boolean
+  # reminder: Reminder @relation (name: "RemindIPAQ", onDelete: CASCADE)
+  quests: Questionnaires! @relation (name: "QuestIPAQ", onDelete: SET_NULL)
+}
+
+type IpaqAnswers {
+  id: ID!  @id
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+
+  quest: Ipaq! @relation (name: "IPAQAnswers")
+}
+
+# type Reminder {
+#   id: ID! @id
+#   remind: Boolean! @default (value: false)
+#   remindDate: DateTime
+# }
+
+# Profile Sports Activity
+type ProfileActivity {
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+  key: String! @unique
+  icon: String!
+  titel: String!
+}
+
+type Activity {
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+  "to comapre easliy with default Activities in frontend - no frontendId => default '' "
+  key: String! @unique
+  
+  titel: String
+  description: String
+  grade: ActivityGrade,
+  icon: String
+  
+  tags: [String!]! @scalarList(strategy: RELATION)
+#   isFavorite: Boolean
+  isCustom: Boolean @default(value: false)
+  
+  "Color for Calendar Entry"
+  color: String
+}
+
+type FavoriteActivity {
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+
+  activityKey: String! @unique
+}
+
+type CalendarEntry {
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+
+  activity: Activity!
+  startTime: DateTime!
+  endTime: DateTime!
+  isDone: Boolean @default(value: false)
+  isRunning: Boolean @default(value: false)
+  trackingRequested: Boolean @default(value: false)
+  patient: Patient @relation (name: "PatientCalendar")
+  sensorData: [SensorData] @relation (name: "CalendarEntrySensorData")
+}
+
+type SensorData {
+  id: ID! @id
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+
+  type: String! # TODO type as enum not as string!
+  x: Float
+  y: Float
+  z: Float
+  alpha: Float
+  beta: Float
+  gamma: Float
+}

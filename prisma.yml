@@ -1,0 +1,24 @@
+datamodel: 
+  - ./database/datamodel.graphql
+  - ./database/enums.datamodel.graphql
+  - ./database/global-settings.datamodel.graphql
+
+endpoint: ${env:PRISMA_ENDPOINT}
+secret: ${env:PRISMA_MANAGEMENT_API_SECRET}
+
+generate:
+  - generator: graphql-schema
+    output: ./app/src/generated/schema/prisma.graphql
+  - generator: typescript-client
+    output: ./app/src/generated/prisma-client/
+
+hooks:
+  post-deploy:
+    # - prisma generate
+    - graphql get-schema --project database
+    - graphqlgen
+
+# Seeds initial data into the database by running a script.
+# NOT working
+# seed:
+  # run: npm ts-node ./database/seed.ts

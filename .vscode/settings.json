@@ -1,0 +1,23 @@
+{
+  "cSpell.words": [
+    "Fakerator",
+    "Ipaq",
+    "buddys",
+    "favs",
+    "geht’s",
+    "gql",
+    "ipaqs",
+    "phqs",
+    "playlyfe",
+    "tasker",
+    "tasktimer"
+  ],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "graphqlForVSCode.nodePath": "node_modules",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true
+  }
+}

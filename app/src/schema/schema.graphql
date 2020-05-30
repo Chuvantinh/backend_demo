@@ -1,0 +1,289 @@
+# import * from './../generated/schema/prisma.graphql'
+# import CreateCalendarInputArgs from './../generated/schema/prisma.graphql'
+
+type Query {
+  ### USER
+  """ Gibt alle Informationen über einen Nutzer zurück (Token erforderlich) """
+  getUser: User!
+  """checkget the users Role"""
+  getUserRole: UserRole!
+  """ retrieves the current Users Settings """
+  getUserSettings: UserSettings!
+
+  """Public key für die Kommunikation mit notifications"""
+  getVapidPublicKey: String!
+  getUserNotificationInfos: [WebPushNotification]
+
+  ### PATIENT
+  """ Return Profile Info of current User """
+  getPatientProfile: PatientProfileInfo!
+  """Get the Profile Activities the user has Choosen"""
+  getPatientProfileActivities: [ProfileActivity]!
+  """Get All Profile Activities tp Choose from"""
+  getAllProfileActivities: [ProfileActivity]!
+
+  ### ACITVITIES
+  """ Return Activities of current User """
+  getUserActivities: [UserActivity]!
+  """ Get single user Activity """
+  getUserActivity(key: String!): UserActivity!
+  getUserActivityByID(id: ID!): UserActivity!
+  """ Return Activities of current User """
+  getManyActivities(ids: [ID!]): [Activity]!
+  """ get all default Activities - default Activities are visible for all users"""
+  getAllDefaultActivities: [Activity]!
+  
+  getActiveMinutesPerWeekGoal(userId: ID): Int!
+  getActiveMinutesInWeek(date: DateTime!, userId: ID): Int!
+  isUserActivity(key: String!): Activity
+  """Gibt alle Aktivitäten eines Nutzers zurück (Token erforderlich)"""
+  getAllActivities(last: Int): [Activity!]!
+    """Gibt Aktivität der mit entsprechenden ID zurück"""
+  getActivity(activityId: ID!): Activity!
+
+
+  ### ADMIN
+  """ get All users"""
+  users: [User!]
+  getUserById(userId: ID!): User
+  getUserByName(name: String!): User
+  getUserTable: [AdminUserTable!]
+  
+  """DEBUG only - get all chats"""
+  chats: [Chat!]
+
+  ### BUDDY
+  """Sucht nach passenden Buddies (Token erforderlich)"""
+  getMatchingBuddies(userId: ID, percentageCap: Int, limit: Int): [BuddyMatch]
+  """Gibt Buddy Anfragen zurück """
+  getAllBuddyRequests: [BuddyRequest!]!
+  getBuddyRequestsCount: Int!
+  getBuddyId: ID
+
+  ### CHAT
+  """Gibt den bisherigen Chatverlauf zurück (Token erforderlich)"""
+  getUsersChat: Chat!
+  getUsersChatMessages(orderBy: ChatMessageOrderByInput, last: Int): [ChatMessage!]!
+
+  ### CALENDAR
+  getUsersCalendarEntries(last: Int): [CalendarEntry!]!
+  getUsersCalendarEntriesForDate(date: DateTime): [CalendarEntry!]!
+  getUsersCalendarEntry(id: ID!): CalendarEntry
+  getBuddyCalendarEntries(last: Int): [CalendarEntry!]!
+  
+  # getUserSensorDataByCalendarEntries(id:ID!):SensorData <-----------------------------------------------------------------------------
+
+  ### SENSORDATA
+  getAllSensors:[SensorData]
+  
+  ### QUESTS
+  """ get latest quests by updatedAt - return one Ipaq and one PHQ if they exist otherwise null"""
+  getUserQuests: Questionnaires!
+
+  getUsersLastPhqQuest(userID: ID): Phq9!
+  getUserLastIpaqQuest(userID: ID): Ipaq!
+}
+
+type Mutation {
+
+  ### TRACKING
+  createSensorData(type: String!, x: Float, y: Float, z: Float): SensorData!
+
+  #### USER
+  """User login der einen Token zurück gibt"""
+  login(username: String!, password: String!): AuthPayload!
+  """Registierung des Nutzers (für User)"""
+  registerUser(username: String!, password: String!, verificationCode: String!): Boolean!
+
+  """ Update Settings """
+  updateUsersSettings(settings: UserSettingsUpdateInput!): UserSettings!
+  """Speichert Notificationinformationen (Token erforderlich)"""
+  saveNotificationInformation(webPushInfos: WebPushNotificationCreateInput!): [WebPushNotification]
+  deleteNotificationInformation(id: ID!): Boolean
+  """Sends Test Notification - with ID to single device - without id to all devices - returns true on success"""
+  sendTestNotification(id: ID): Boolean
+
+  ### ADMIN
+  """Nutzer anlegen (für Admins und Doktoren)"""
+  createAppUser(username: String!, verificationCode: String!, role: UserRole!): User!
+  """For Admin user - create Sports available during profile creation"""
+  createProfileActivities(activities: [ProfileActivityCreateInput]): [ProfileActivity]!
+  """For Admin user - creates Activities for all users to choose from"""
+  createDefaultActivities(activities: [ActivityCreateInput]): [Activity]!
+  """Nutzer löschen (für Admins und Doktoren)"""
+  deleteAppUser(args: UserWhereUniqueInput!): User!
+  """Remove Buddy connection"""
+  disengageBuddy(userId: ID!): User!
+  """Verifikationscode neu vergeben"""
+  updateUserVerificationCode(username: String!, verificationCode: String!): User!
+
+  ### PATIENT
+  """Verifiziert Nutzer um Buddy zu suchen oder gefunden zu werden"""
+  verifyPatient(verify: Boolean!): Boolean!
+  """Update Profile"""
+  updatePatientProfile(profile: PatientProfileInfoUpdateInput!): PatientProfileInfo!
+  """Sports choosen in Profile creation"""
+  updatePatientProfileActivities(activities: ProfileActivityUpdateManyInput!): [ProfileActivity]!
+
+  ### QUESTS
+  """Erstellt einen PHQ9 Fragebogen"""
+  createPhq9Quest(phq9Input: Phq9CreateWithoutQuestsInput!): Phq9!
+  """Erstellt einen IPAQ Fragebogen"""
+  createIpaqQuest(ipaqInput: IpaqCreateWithoutQuestsInput!): Ipaq!
+
+  ### CHAT
+  """Setzt Chatnutzer online"""
+  setOnline: User!
+  """Setzt Chatuser offline"""
+  setOffline: User!
+  """Eine Nachricht senden (Token erforderlich)"""
+  sendChatMessage(text: String!): ChatMessage!
+  sendCalendarEventAsChatAttachment(originalId: ID!, createAttachment: CalendarEntryCreateWithoutPatientInput!, ownerId: ID!): ChatMessage!
+
+  ### BUDDY  
+  """Sendet eine Anfrage an einen potentiellen Buddy - gibt Buddyrequest ID zurück """
+  sendBuddyRequest(requestToUserId: ID!): ID!
+  """Sends buddy request to serveral user - if there is an existing request matches immediately & returns true; no existing request: returns false"""
+  sendBuddyRequests(requestToUserIds: [ID]!): Boolean!
+  """Sendet eine Anwort vom potentiellen Buddy (Token erforderlich)"""
+  sendBuddyResponse(accepted: Boolean!, newBuddyPatientId: ID!): Chat
+  removeBuddyRequest(reqId: ID!): ID!
+
+  #### CALENDAR
+  createUserCalendarEntry(input: CalendarEntryCreateWithoutPatientInput!): CalendarEntry
+  updateUserCalendarEntry(id: ID!, update: CalendarEntryUpdateInput!): CalendarEntry
+  deleteUserCalendarEntry(id: ID!): ID!
+
+  ### SensorData
+
+  ### ACTIVITY
+  """Erstellt eine Aktivität und fügt sie der Wochenaktivität hinzu"""
+  createUserActivity(input: ActivityCreateInput!): Activity!
+    """ Creates many user activities - returns all activities of user  """
+  createUserActivities(input: ActivityCreateManyInput!): [Activity]!
+  """Löscht eine Aktivität"""
+  deleteUserActivity(activityId: ID!): Activity
+  """Löscht mehrere Aktivitäten (Token erforderlich)"""
+  deleteUserActivities(activityIds: [ID!]!): String!
+  """ create a custom Activity """
+  createCustomActivity(activity: ActivityCreateInput!): UserActivity
+  """ favorites a Activity """
+  favoriteUserActivity(key: String!, fav: Boolean!): UserActivity
+  """ sets Active minutes user wants to do per week """
+  setActiveMinutesInWeek(minutes: Int!): Int!
+
+  ### ADMIN
+  adminLinkBuddies(userId: ID!, buddyId: ID!): Boolean
+
+  ### DEBUG
+  """TESTING only! - delete Chat"""
+  deleteChat(id: ID!): Chat
+
+}
+
+type Subscription {
+  """Beobachtet die Erstellung von PHQ9 Fragebögen (Token erforderlich)"""
+  watchPhq9s: User!
+
+  """Beobachtet die Erstellung von IPAQ Fragebögen (Token erforderlich)"""
+  watchIpaqs: User!
+
+  """Beobachtet die Nachrichten Aktivitäten in einem Chat(Token erforderlich)"""
+  watchChatMessages: ChatMessage!
+
+  """Beobachtet Buddy Anfragen (Token erforderlich)"""
+  watchBuddyRequests: BuddyRequest!
+
+  """Subscribe to currently running calendar entry - for activity tracking"""
+  watchActiveCalendarEntry: CalendarEntry!
+
+  """Unused - Subscribe to changes of having a buddy"""
+  watchHasBuddy: Buddy!
+  """Unused - for testing"""
+  watchUser: User!
+
+  # """Beobachtet Änderungen des Avatars (Token erforderlich)"""
+  # watchAvatar: User!
+  # """Beobachtet Änderungen bei den Sportarten (Token erforderlich)"""
+  # watchSports: User!
+}
+
+# DTOs - Data transfer Objects
+### input types
+input CreatePatientUserInputArgs {
+  username: String!
+  password: String
+  role: UserRole
+  verificationCode: String!
+  # birthday: DateTime
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+### output types
+# User DTO 
+# We redefinde the User type here because we never want to transmit the password 
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String!
+  role: UserRole
+  settings: UserSettings
+
+  notifications: [WebPushNotification]
+
+  patient: Patient
+
+  lastActive: DateTime
+}
+
+type BuddyMatch {
+  user: User!
+  matchingScore: Int!
+  sportsScore: Int
+  ipaqScore: Int
+  phqScore: Int
+  genderScore: Int
+  meetingScore: Int
+}
+
+type UserActivity {
+  id: ID! 
+  createdAt: DateTime
+  updatedAt: DateTime
+  key: String!
+  
+  titel: String
+  description: String
+  grade: ActivityGrade,
+  icon: String
+  
+  tags: [String!]!
+  isFavorite: Boolean
+  isCustom: Boolean
+  
+  "Color for Calendar Entry"
+  color: String
+}
+
+# Define type for aggregated / calculated admin table data
+type AdminUserTable {
+  user: User!
+
+  lastIpaqScore: Int
+  ipaqDelta: Int
+
+  lastPhqScore: Int
+  phqDelta: Int
+
+  activeMinutesPlanned: Int
+  activeMinutesGoal: Int
+
+  lastSendMessage: DateTime
+
+  eventsCompletedPercent: Float
+}

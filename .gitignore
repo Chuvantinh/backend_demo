@@ -1,0 +1,8 @@
+.idea
+node_modules
+lib
+dist
+logfiles/Logfile.txt
+.env
+.env.heroku
+.env.tmcc

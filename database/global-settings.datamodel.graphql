@@ -1,0 +1,116 @@
+# Configure Settings for all Users
+type GlobalSettings {
+  id: ID! @id
+  updatedAt: DateTime @updatedAt
+  
+  "dont show user matches with score below this value"
+  matchingPercentageCap: Int
+  "discard buddy request after this time"
+  matchingTimeout: TimeSpan  @relation (name: "MatchingTimeoutRelation")
+  
+  "default slider value when creating activities"
+  defaultActivityTimeMinutesPerWeek: Int
+  "min slider value when creating activities"
+  minimumActivityTimeMinutes: Int
+  "max slider value when creating activities"
+  maximumActivityTimeMinutes: Int
+  
+  "IPAQ group low activity below this value"
+  ipaqGroupLowMax: Int
+  "IPAQ group Moderate activity below this value"
+  ipaqGroupModerateMax: Int
+  "IPAQ group high activity below this value"
+  ipaqGroupHighMax: Int
+
+  "lower threshold for low PHQ Group"
+  phqGroupLowMin: Int
+  "higher threshold for low PHQ Group - everthing above is considered high group"
+  phqGroupLowMax: Int
+  
+  botSettings: BotSettings @relation (name: "GlobalBotSettings")
+  webPushSettings: WebPushSettings  @relation (name: "GlobalWebPushSettings")
+}
+
+type BotSettings {
+  id: ID!  @id
+  updatedAt: DateTime @updatedAt
+  
+  "first message bot sends into chat"
+  botFirstGreetingText: String
+  botFirstGreetingTextDelay: TimeSpan @relation (name: "BotFirstGreetingTextDelayRelation")
+  
+  "Time after bot sends messages to Users reminding them to create activities"
+  botAskCreateActivitiesTime: TimeSpan @relation (name: "CreateActivitiesTimeRelation")
+  botAskCreateActivitiesMessage:  String
+  
+  botActivityLessThanPlannedMessage: String
+  # Sunday = 0 -> Donnerstag = 4
+  botActivityLessThanPlannedWeekday: Int
+
+  "Time after bot sends messages to Users reminding them to chat"
+  botAskStartChatIntervall: TimeSpan @relation (name: "StartChatIntervallRelation")
+  "Message bot sends to Users remiding them to chat"
+  botAskStartChatMessage: String
+}
+
+type WebPushSettings {
+  id: ID!  @id
+  updatedAt: DateTime @updatedAt
+
+  ## Questionnaires
+  webPushIpaqReminderIntervall: TimeSpan @relation (name: "WebPushIpaqIntervallRelation")
+  webPushIpaqReminderIntervallFollowUp: TimeSpan @relation (name: "WebPushIpaqIntervallFollowUpRelation")
+  webPushIpaqReminderMessage: String
+
+  webPushPhqReminderIntervall: TimeSpan @relation (name: "WebPushPhqIntervallRelation")
+  webPushPhqReminderIntervallFollowUp: TimeSpan @relation (name: "WebPushPhqIntervallFollowUpRelation")
+  webPushPhqReminderMessage: String
+
+
+  ## Matching
+  # incoming buddy request 
+  webPushIncomingBuddyRequestMessage: String
+  webPushIncomingBuddyRequestDelay: TimeSpan @relation (name: "WebPushIncomingBuddyRequestIntervallR") 
+  # incoming buddy request no response
+  webPushIncomingRequestNoResponseMessage: String
+  webPushIncomingRequestNoResponseIntervall: TimeSpan @relation (name: "WebPushIncomingRequestIntervallR") #default 24h
+  webPushIncomingRequestNoResponseFollowupIntervall: TimeSpan @relation (name: "WebPushIncomingRequestFUIntervallR") # default 46h
+  # buddy request was not answered
+  webPushIncomingRequestNotAnsweredMessage: String
+  webPushIncomingRequestNotAnsweredIntervall: TimeSpan @relation (name: "WebPushIRNAIntervallRelation") 
+  
+  ## Activities
+  # activity not enough planned - to user
+  webPushNotEnoughActivitiesMessage: String
+  webPushNotEnoughActivitiesWeekday: Int
+  
+  # activity not enough planned - to buddy
+  webPushNotEnoughActivitiesBuddyMessage: String
+  webPushNotEnoughActivitiesBuddyWeekday: Int
+  # activity to much planned - to user
+  webPushToManyActivitiesMessage: String
+  webPushToManyActivitiesWeekday: Int
+  # activity to much planned - to buddy
+  webPushToManyActivitiesBuddyMessage: String
+  webPushToManyActivitiesBuddyDelay: TimeSpan @relation (name: "WebPushToManyActivitiesBuddyDelayR")
+  
+  # TODO this probalbly needs a time of day setting
+  # activity missed - to buddy
+  webPushActivityMissedBuddyMessage: String
+  webPushActivityMissedBuddyDelay: TimeSpan @relation (name: "WebPushActivityMissedBuddyDelayR") 
+}
+
+
+
+# * TODO - could be created as custom scalar
+# * does prisma support custom scalars?
+# * custom scalars need to implement own parser / serializer
+# Time Span can describe a delay or relative point in Time opposed to DateTime which describes an absolute Point in Time
+type TimeSpan {
+  id: ID! @id
+  updatedAt: DateTime @updatedAt
+  days: Int! @default(value: 0)
+  hours: Int! @default(value: 0)
+  minutes: Int! @default(value: 0)
+  seconds: Int! @default(value: 0)
+}

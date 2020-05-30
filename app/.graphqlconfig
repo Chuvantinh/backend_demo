@@ -1,0 +1,39 @@
+{
+  "projects": {
+    "app": {
+      "schemaPath": "src/schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "local": {
+            "url": "http://localhost:4011"
+          },
+          "tmcc": {
+            "url": "https://s-tmcc-buddy.charite.de/"
+          },
+          "tmcc-sub": {
+            "url": "https://s-tmcc-buddy-api.charite.de/"
+          }
+        }
+      }
+    },
+    "database": {
+      "schemaPath": "src/generated/schema/prisma.graphql",
+      "extensions": {
+        "endpoints": {
+          "db-local": {
+            "url": "http://localhost:4477",
+            "headers": {
+              "Authorization": "Bearer ${env:GRAPHQL_PLAYGROUND_TOKEN_LOCAL}"
+            }
+          },
+          "db-tmcc": {
+            "url": "https://s-tmcc-buddy-prisma.charite.de/",
+            "headers": {
+              "Authorization": "Bearer ${env:GRAPHQL_PLAYGROUND_TOKEN_TMCC}"
+            }
+          }
+        }
+      }
+    }
+  }
+}
