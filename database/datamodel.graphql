@@ -264,3 +264,135 @@ type SensorData {
   beta: Float
   gamma: Float
 }
+
+### created tables by vantinhchu ###
+
+# for Kliniken, Ärzte, Hersteller, Startups, Forschung, Studenten, Veröffentliche
+# Has relationship many to many challagenes
+type Group {
+  id: ID! @id
+  title: String! @unique
+  description : String!
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+  createdBy: User  @relation (name: "UsersGroup")
+  challenge: [Challenge!]!
+}
+
+# Idee, Therapie, Technik, Geschäftsmodell, Design/Ux, Regulatorisches , Daten
+type Category {
+  id: ID! @id
+  title: String! @unique
+  description: String!
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+  challenge: [Challenge!]!
+}
+
+# saving Information about all Challenge in the system
+## Has relationship one to many Groups
+## Has relationship many to many Categories
+## Has relationship many to many User as Jury for tab joined Challenge(meine Teilnahmen an Challenge)
+type Challenge {
+  id: ID! @id
+  title : String! @unique
+  description: String!
+  image: String!
+  premium : String
+  timeEnd: DateTime @timeEnd
+  emailSend: String
+  jury: [User!]! @relation (name: "UserjoinedChallenge")
+  group: [Group!]!
+  category:  [Category!]!
+  status: StatusChallegen
+  initiator: String!
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+  createdBy: User @relation (name: "CreatedbyChallengeUser")
+}
+
+### created 3 table relationships for Group with Challenge  and  Categories with Challenge
+type ChallengeGroup {
+  id: ID! @id
+  challegeId: Challenge
+  groupID: Group
+}
+
+type ChallengeCategory {
+  id: ID! @id
+  challegeId: Challenge
+  categoryID: Group
+}
+
+type JoinedChallenges{
+  id: ID! @id
+  userId : User
+  challegeId: Challenge
+}
+### created 3 table relationships for Group with Challenge  and  Categories with Challenge
+
+# Who is a Foundation (ex RI MUHC & MGH Foundation)
+type Initiator {
+  id: ID! @id
+  title: String! @unique
+  description: String!
+}
+
+# my comments on the Challenge as  Voting of other people for this challen
+# has relationship one vote for one challenge , but the Challenge has many votings
+# for tabe my votings and my voting details ,
+# or play with other challenge of other people as tab 'Meine Teinahmen an Challenge'
+type Voting {
+  id: ID! @id
+  challengeID : Challenge
+  contributionID: Contribution
+  title: String!
+  description: String
+  votedPoint: Int
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+  createdBy: User @relation (name: "VotingsUser")
+}
+
+# die Lösung von andere Leute , die beitragen
+type Contribution {
+  id: ID! @id
+  challengeID : Challenge
+  title: String!
+  description: String
+  image: String
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+  createdBy: User @relation (name: "ContributionsUser")
+}
+
+# fix color for every group
+type  GroupColor{
+  id: ID! @id
+  group: Group
+  color: String!
+}
+
+#type ChallengeImage{
+#  id: ID! @id,
+#  user    User   @relation(fields: [userId], references: [id])
+#  challegeID : Challenge @relation(fields: [id])
+#  image_src: String!
+#}
+
+# Prämie vergeben
+type Award{
+  id: ID! @id
+  challengeID : Challenge
+  contributionID: Contribution
+  votingID: Voting
+  createdBy: User @relation(name: "AwardsUser")
+  status: AwardVT
+  winner: User @relation(name: "AwardToUser")
+  createdAt: DateTime  @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+# mein Prämie, Trophäen  also how it works.
+
+### end create table by vantinhchu ###

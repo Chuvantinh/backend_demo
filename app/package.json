@@ -41,7 +41,7 @@
   },
   "homepage": "https://gitlab.com/aid-project/buddybackend#readme",
   "dependencies": {
-    "apollo-server": "^2.4.8",
+    "apollo-server": "^2.16.0",
     "async-each": "1.0.3",
     "bcryptjs": "^2.4.3",
     "clone": "^2.1.2",

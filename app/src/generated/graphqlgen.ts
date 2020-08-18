@@ -22,7 +22,7 @@ import {
   IpaqAnswers,
   FavoriteActivity,
   BuddyRequest
-} from "./prisma-client/index";
+} from "./prisma-client";
 import {
   UserActivity,
   AdminUserTable,

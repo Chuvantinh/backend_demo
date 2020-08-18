@@ -6,7 +6,7 @@ import { verifyAuthKey, operationAuthorized, getUserRole } from './authorization
 import { prisma, GlobalSettings, Prisma } from './generated/prisma-client';
 import { resolvers as importResolvers } from './resolver';
 import { log, logT } from './logger';
-import { PORT, TOKEN_EXPIRY_TIME, DEBUG, PLAYGROUND, ALLOW_INTROSPECTION, CORS_ORIGIN, TASK_TICK_INTERVAL_MS, SERVER_PROXY } from './config/env.config';
+import { ENDPOINT,PORT, TOKEN_EXPIRY_TIME, DEBUG, PLAYGROUND, ALLOW_INTROSPECTION, CORS_ORIGIN, TASK_TICK_INTERVAL_MS, SERVER_PROXY } from './config/env.config';
 import { Context } from './types';
 import { getGlobalSettings, getGlobalSettingsId } from './global_settings/global.settings';
 import { taskScheduler } from './tasks/tasks';
@@ -25,9 +25,9 @@ export async function main() {
 
   const tasker = taskScheduler;
   await tasker.restoreTasks(prisma);
-
+  console.log(ENDPOINT);
   // see https://github.com/apollographql/apollo-server/issues/2315 for sample
-  const server: ApolloServer = new ApolloServer({
+  let server: ApolloServer = new ApolloServer({
     // schema,
     typeDefs: gql(importSchema('./src/schema/schema.graphql')),
     resolvers: importResolvers as any,
@@ -38,7 +38,7 @@ export async function main() {
       } else {
         header.authToken = req.headers.authorization
       }
-
+      console.log(header);
       // check if operation is excepted from auth
       let authRequired = true;
       if (req && req.body && req.body.query) {
@@ -46,6 +46,7 @@ export async function main() {
       }
 
       const uid = await verifyAuthKey(header, authRequired);
+      console.log('uid' + uid);
       return {
         db: prisma,
         userId: uid,
@@ -76,6 +77,7 @@ export async function main() {
     playground: PLAYGROUND, // only affects serving web playground?
     introspection: ALLOW_INTROSPECTION,
   });
+
 
   return server.listen({ port: PORT || 4000 }).then((s) => {
     log.info(`GraphQL endpoint ready at ${s.url}`);

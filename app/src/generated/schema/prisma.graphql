@@ -431,6 +431,10 @@ type AggregateActivity {
   count: Int!
 }
 
+type AggregateAward {
+  count: Int!
+}
+
 type AggregateBot {
   count: Int!
 }
@@ -451,6 +455,22 @@ type AggregateCalendarEntry {
   count: Int!
 }
 
+type AggregateCategory {
+  count: Int!
+}
+
+type AggregateChallenge {
+  count: Int!
+}
+
+type AggregateChallengeCategory {
+  count: Int!
+}
+
+type AggregateChallengeGroup {
+  count: Int!
+}
+
 type AggregateChat {
   count: Int!
 }
@@ -463,6 +483,10 @@ type AggregateChatMessageAttachment {
   count: Int!
 }
 
+type AggregateContribution {
+  count: Int!
+}
+
 type AggregateFavoriteActivity {
   count: Int!
 }
@@ -471,11 +495,27 @@ type AggregateGlobalSettings {
   count: Int!
 }
 
+type AggregateGroup {
+  count: Int!
+}
+
+type AggregateGroupColor {
+  count: Int!
+}
+
+type AggregateInitiator {
+  count: Int!
+}
+
 type AggregateIpaq {
   count: Int!
 }
 
 type AggregateIpaqAnswers {
+  count: Int!
+}
+
+type AggregateJoinedChallenges {
   count: Int!
 }
 
@@ -519,12 +559,153 @@ type AggregateUserSettings {
   count: Int!
 }
 
+type AggregateVoting {
+  count: Int!
+}
+
 type AggregateWebPushNotification {
   count: Int!
 }
 
 type AggregateWebPushSettings {
   count: Int!
+}
+
+type Award {
+  id: ID!
+  challengeID: Challenge
+  contributionID: Contribution
+  votingID: Voting
+  createdBy: User
+  status: AwardVT
+  winner: User
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type AwardConnection {
+  pageInfo: PageInfo!
+  edges: [AwardEdge]!
+  aggregate: AggregateAward!
+}
+
+input AwardCreateInput {
+  id: ID
+  challengeID: ChallengeCreateOneInput
+  contributionID: ContributionCreateOneInput
+  votingID: VotingCreateOneInput
+  createdBy: UserCreateOneInput
+  status: AwardVT
+  winner: UserCreateOneInput
+}
+
+type AwardEdge {
+  node: Award!
+  cursor: String!
+}
+
+enum AwardOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type AwardPreviousValues {
+  id: ID!
+  status: AwardVT
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type AwardSubscriptionPayload {
+  mutation: MutationType!
+  node: Award
+  updatedFields: [String!]
+  previousValues: AwardPreviousValues
+}
+
+input AwardSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AwardWhereInput
+  AND: [AwardSubscriptionWhereInput!]
+  OR: [AwardSubscriptionWhereInput!]
+  NOT: [AwardSubscriptionWhereInput!]
+}
+
+input AwardUpdateInput {
+  challengeID: ChallengeUpdateOneInput
+  contributionID: ContributionUpdateOneInput
+  votingID: VotingUpdateOneInput
+  createdBy: UserUpdateOneInput
+  status: AwardVT
+  winner: UserUpdateOneInput
+}
+
+input AwardUpdateManyMutationInput {
+  status: AwardVT
+}
+
+enum AwardVT {
+  GOLD
+  SILBER
+  BRONZ
+}
+
+input AwardWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  challengeID: ChallengeWhereInput
+  contributionID: ContributionWhereInput
+  votingID: VotingWhereInput
+  createdBy: UserWhereInput
+  status: AwardVT
+  status_not: AwardVT
+  status_in: [AwardVT!]
+  status_not_in: [AwardVT!]
+  winner: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [AwardWhereInput!]
+  OR: [AwardWhereInput!]
+  NOT: [AwardWhereInput!]
+}
+
+input AwardWhereUniqueInput {
+  id: ID
 }
 
 type BatchPayload {
@@ -1457,6 +1638,1001 @@ input CalendarEntryWhereUniqueInput {
   id: ID
 }
 
+type Category {
+  id: ID!
+  title: String!
+  description: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  challenge(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge!]
+}
+
+type CategoryConnection {
+  pageInfo: PageInfo!
+  edges: [CategoryEdge]!
+  aggregate: AggregateCategory!
+}
+
+input CategoryCreateInput {
+  id: ID
+  title: String!
+  description: String!
+  challenge: ChallengeCreateManyWithoutCategoryInput
+}
+
+input CategoryCreateManyWithoutChallengeInput {
+  create: [CategoryCreateWithoutChallengeInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input CategoryCreateWithoutChallengeInput {
+  id: ID
+  title: String!
+  description: String!
+}
+
+type CategoryEdge {
+  node: Category!
+  cursor: String!
+}
+
+enum CategoryOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CategoryPreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CategoryScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CategoryScalarWhereInput!]
+  OR: [CategoryScalarWhereInput!]
+  NOT: [CategoryScalarWhereInput!]
+}
+
+type CategorySubscriptionPayload {
+  mutation: MutationType!
+  node: Category
+  updatedFields: [String!]
+  previousValues: CategoryPreviousValues
+}
+
+input CategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CategoryWhereInput
+  AND: [CategorySubscriptionWhereInput!]
+  OR: [CategorySubscriptionWhereInput!]
+  NOT: [CategorySubscriptionWhereInput!]
+}
+
+input CategoryUpdateInput {
+  title: String
+  description: String
+  challenge: ChallengeUpdateManyWithoutCategoryInput
+}
+
+input CategoryUpdateManyDataInput {
+  title: String
+  description: String
+}
+
+input CategoryUpdateManyMutationInput {
+  title: String
+  description: String
+}
+
+input CategoryUpdateManyWithoutChallengeInput {
+  create: [CategoryCreateWithoutChallengeInput!]
+  delete: [CategoryWhereUniqueInput!]
+  connect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  disconnect: [CategoryWhereUniqueInput!]
+  update: [CategoryUpdateWithWhereUniqueWithoutChallengeInput!]
+  upsert: [CategoryUpsertWithWhereUniqueWithoutChallengeInput!]
+  deleteMany: [CategoryScalarWhereInput!]
+  updateMany: [CategoryUpdateManyWithWhereNestedInput!]
+}
+
+input CategoryUpdateManyWithWhereNestedInput {
+  where: CategoryScalarWhereInput!
+  data: CategoryUpdateManyDataInput!
+}
+
+input CategoryUpdateWithoutChallengeDataInput {
+  title: String
+  description: String
+}
+
+input CategoryUpdateWithWhereUniqueWithoutChallengeInput {
+  where: CategoryWhereUniqueInput!
+  data: CategoryUpdateWithoutChallengeDataInput!
+}
+
+input CategoryUpsertWithWhereUniqueWithoutChallengeInput {
+  where: CategoryWhereUniqueInput!
+  update: CategoryUpdateWithoutChallengeDataInput!
+  create: CategoryCreateWithoutChallengeInput!
+}
+
+input CategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  challenge_every: ChallengeWhereInput
+  challenge_some: ChallengeWhereInput
+  challenge_none: ChallengeWhereInput
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+type Challenge {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  group(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
+  category(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category!]
+  status: StatusChallegen
+  initiator: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: User
+}
+
+type ChallengeCategory {
+  id: ID!
+  challegeId: Challenge
+  categoryID: Group
+}
+
+type ChallengeCategoryConnection {
+  pageInfo: PageInfo!
+  edges: [ChallengeCategoryEdge]!
+  aggregate: AggregateChallengeCategory!
+}
+
+input ChallengeCategoryCreateInput {
+  id: ID
+  challegeId: ChallengeCreateOneInput
+  categoryID: GroupCreateOneInput
+}
+
+type ChallengeCategoryEdge {
+  node: ChallengeCategory!
+  cursor: String!
+}
+
+enum ChallengeCategoryOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type ChallengeCategoryPreviousValues {
+  id: ID!
+}
+
+type ChallengeCategorySubscriptionPayload {
+  mutation: MutationType!
+  node: ChallengeCategory
+  updatedFields: [String!]
+  previousValues: ChallengeCategoryPreviousValues
+}
+
+input ChallengeCategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ChallengeCategoryWhereInput
+  AND: [ChallengeCategorySubscriptionWhereInput!]
+  OR: [ChallengeCategorySubscriptionWhereInput!]
+  NOT: [ChallengeCategorySubscriptionWhereInput!]
+}
+
+input ChallengeCategoryUpdateInput {
+  challegeId: ChallengeUpdateOneInput
+  categoryID: GroupUpdateOneInput
+}
+
+input ChallengeCategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  challegeId: ChallengeWhereInput
+  categoryID: GroupWhereInput
+  AND: [ChallengeCategoryWhereInput!]
+  OR: [ChallengeCategoryWhereInput!]
+  NOT: [ChallengeCategoryWhereInput!]
+}
+
+input ChallengeCategoryWhereUniqueInput {
+  id: ID
+}
+
+type ChallengeConnection {
+  pageInfo: PageInfo!
+  edges: [ChallengeEdge]!
+  aggregate: AggregateChallenge!
+}
+
+input ChallengeCreateInput {
+  id: ID
+  title: String!
+  description: String!
+  image: String!
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserCreateManyInput
+  group: GroupCreateManyWithoutChallengeInput
+  category: CategoryCreateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String!
+  createdBy: UserCreateOneInput
+}
+
+input ChallengeCreateManyWithoutCategoryInput {
+  create: [ChallengeCreateWithoutCategoryInput!]
+  connect: [ChallengeWhereUniqueInput!]
+}
+
+input ChallengeCreateManyWithoutGroupInput {
+  create: [ChallengeCreateWithoutGroupInput!]
+  connect: [ChallengeWhereUniqueInput!]
+}
+
+input ChallengeCreateOneInput {
+  create: ChallengeCreateInput
+  connect: ChallengeWhereUniqueInput
+}
+
+input ChallengeCreateWithoutCategoryInput {
+  id: ID
+  title: String!
+  description: String!
+  image: String!
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserCreateManyInput
+  group: GroupCreateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String!
+  createdBy: UserCreateOneInput
+}
+
+input ChallengeCreateWithoutGroupInput {
+  id: ID
+  title: String!
+  description: String!
+  image: String!
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserCreateManyInput
+  category: CategoryCreateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String!
+  createdBy: UserCreateOneInput
+}
+
+type ChallengeEdge {
+  node: Challenge!
+  cursor: String!
+}
+
+type ChallengeGroup {
+  id: ID!
+  challegeId: Challenge
+  groupID: Group
+}
+
+type ChallengeGroupConnection {
+  pageInfo: PageInfo!
+  edges: [ChallengeGroupEdge]!
+  aggregate: AggregateChallengeGroup!
+}
+
+input ChallengeGroupCreateInput {
+  id: ID
+  challegeId: ChallengeCreateOneInput
+  groupID: GroupCreateOneInput
+}
+
+type ChallengeGroupEdge {
+  node: ChallengeGroup!
+  cursor: String!
+}
+
+enum ChallengeGroupOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type ChallengeGroupPreviousValues {
+  id: ID!
+}
+
+type ChallengeGroupSubscriptionPayload {
+  mutation: MutationType!
+  node: ChallengeGroup
+  updatedFields: [String!]
+  previousValues: ChallengeGroupPreviousValues
+}
+
+input ChallengeGroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ChallengeGroupWhereInput
+  AND: [ChallengeGroupSubscriptionWhereInput!]
+  OR: [ChallengeGroupSubscriptionWhereInput!]
+  NOT: [ChallengeGroupSubscriptionWhereInput!]
+}
+
+input ChallengeGroupUpdateInput {
+  challegeId: ChallengeUpdateOneInput
+  groupID: GroupUpdateOneInput
+}
+
+input ChallengeGroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  challegeId: ChallengeWhereInput
+  groupID: GroupWhereInput
+  AND: [ChallengeGroupWhereInput!]
+  OR: [ChallengeGroupWhereInput!]
+  NOT: [ChallengeGroupWhereInput!]
+}
+
+input ChallengeGroupWhereUniqueInput {
+  id: ID
+}
+
+enum ChallengeOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  image_ASC
+  image_DESC
+  premium_ASC
+  premium_DESC
+  timeEnd_ASC
+  timeEnd_DESC
+  emailSend_ASC
+  emailSend_DESC
+  status_ASC
+  status_DESC
+  initiator_ASC
+  initiator_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ChallengePreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  status: StatusChallegen
+  initiator: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ChallengeScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  premium: String
+  premium_not: String
+  premium_in: [String!]
+  premium_not_in: [String!]
+  premium_lt: String
+  premium_lte: String
+  premium_gt: String
+  premium_gte: String
+  premium_contains: String
+  premium_not_contains: String
+  premium_starts_with: String
+  premium_not_starts_with: String
+  premium_ends_with: String
+  premium_not_ends_with: String
+  timeEnd: DateTime
+  timeEnd_not: DateTime
+  timeEnd_in: [DateTime!]
+  timeEnd_not_in: [DateTime!]
+  timeEnd_lt: DateTime
+  timeEnd_lte: DateTime
+  timeEnd_gt: DateTime
+  timeEnd_gte: DateTime
+  emailSend: String
+  emailSend_not: String
+  emailSend_in: [String!]
+  emailSend_not_in: [String!]
+  emailSend_lt: String
+  emailSend_lte: String
+  emailSend_gt: String
+  emailSend_gte: String
+  emailSend_contains: String
+  emailSend_not_contains: String
+  emailSend_starts_with: String
+  emailSend_not_starts_with: String
+  emailSend_ends_with: String
+  emailSend_not_ends_with: String
+  status: StatusChallegen
+  status_not: StatusChallegen
+  status_in: [StatusChallegen!]
+  status_not_in: [StatusChallegen!]
+  initiator: String
+  initiator_not: String
+  initiator_in: [String!]
+  initiator_not_in: [String!]
+  initiator_lt: String
+  initiator_lte: String
+  initiator_gt: String
+  initiator_gte: String
+  initiator_contains: String
+  initiator_not_contains: String
+  initiator_starts_with: String
+  initiator_not_starts_with: String
+  initiator_ends_with: String
+  initiator_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ChallengeScalarWhereInput!]
+  OR: [ChallengeScalarWhereInput!]
+  NOT: [ChallengeScalarWhereInput!]
+}
+
+type ChallengeSubscriptionPayload {
+  mutation: MutationType!
+  node: Challenge
+  updatedFields: [String!]
+  previousValues: ChallengePreviousValues
+}
+
+input ChallengeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ChallengeWhereInput
+  AND: [ChallengeSubscriptionWhereInput!]
+  OR: [ChallengeSubscriptionWhereInput!]
+  NOT: [ChallengeSubscriptionWhereInput!]
+}
+
+input ChallengeUpdateDataInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserUpdateManyInput
+  group: GroupUpdateManyWithoutChallengeInput
+  category: CategoryUpdateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String
+  createdBy: UserUpdateOneInput
+}
+
+input ChallengeUpdateInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserUpdateManyInput
+  group: GroupUpdateManyWithoutChallengeInput
+  category: CategoryUpdateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String
+  createdBy: UserUpdateOneInput
+}
+
+input ChallengeUpdateManyDataInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  status: StatusChallegen
+  initiator: String
+}
+
+input ChallengeUpdateManyMutationInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  status: StatusChallegen
+  initiator: String
+}
+
+input ChallengeUpdateManyWithoutCategoryInput {
+  create: [ChallengeCreateWithoutCategoryInput!]
+  delete: [ChallengeWhereUniqueInput!]
+  connect: [ChallengeWhereUniqueInput!]
+  set: [ChallengeWhereUniqueInput!]
+  disconnect: [ChallengeWhereUniqueInput!]
+  update: [ChallengeUpdateWithWhereUniqueWithoutCategoryInput!]
+  upsert: [ChallengeUpsertWithWhereUniqueWithoutCategoryInput!]
+  deleteMany: [ChallengeScalarWhereInput!]
+  updateMany: [ChallengeUpdateManyWithWhereNestedInput!]
+}
+
+input ChallengeUpdateManyWithoutGroupInput {
+  create: [ChallengeCreateWithoutGroupInput!]
+  delete: [ChallengeWhereUniqueInput!]
+  connect: [ChallengeWhereUniqueInput!]
+  set: [ChallengeWhereUniqueInput!]
+  disconnect: [ChallengeWhereUniqueInput!]
+  update: [ChallengeUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [ChallengeUpsertWithWhereUniqueWithoutGroupInput!]
+  deleteMany: [ChallengeScalarWhereInput!]
+  updateMany: [ChallengeUpdateManyWithWhereNestedInput!]
+}
+
+input ChallengeUpdateManyWithWhereNestedInput {
+  where: ChallengeScalarWhereInput!
+  data: ChallengeUpdateManyDataInput!
+}
+
+input ChallengeUpdateOneInput {
+  create: ChallengeCreateInput
+  update: ChallengeUpdateDataInput
+  upsert: ChallengeUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ChallengeWhereUniqueInput
+}
+
+input ChallengeUpdateWithoutCategoryDataInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserUpdateManyInput
+  group: GroupUpdateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String
+  createdBy: UserUpdateOneInput
+}
+
+input ChallengeUpdateWithoutGroupDataInput {
+  title: String
+  description: String
+  image: String
+  premium: String
+  timeEnd: DateTime
+  emailSend: String
+  jury: UserUpdateManyInput
+  category: CategoryUpdateManyWithoutChallengeInput
+  status: StatusChallegen
+  initiator: String
+  createdBy: UserUpdateOneInput
+}
+
+input ChallengeUpdateWithWhereUniqueWithoutCategoryInput {
+  where: ChallengeWhereUniqueInput!
+  data: ChallengeUpdateWithoutCategoryDataInput!
+}
+
+input ChallengeUpdateWithWhereUniqueWithoutGroupInput {
+  where: ChallengeWhereUniqueInput!
+  data: ChallengeUpdateWithoutGroupDataInput!
+}
+
+input ChallengeUpsertNestedInput {
+  update: ChallengeUpdateDataInput!
+  create: ChallengeCreateInput!
+}
+
+input ChallengeUpsertWithWhereUniqueWithoutCategoryInput {
+  where: ChallengeWhereUniqueInput!
+  update: ChallengeUpdateWithoutCategoryDataInput!
+  create: ChallengeCreateWithoutCategoryInput!
+}
+
+input ChallengeUpsertWithWhereUniqueWithoutGroupInput {
+  where: ChallengeWhereUniqueInput!
+  update: ChallengeUpdateWithoutGroupDataInput!
+  create: ChallengeCreateWithoutGroupInput!
+}
+
+input ChallengeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  premium: String
+  premium_not: String
+  premium_in: [String!]
+  premium_not_in: [String!]
+  premium_lt: String
+  premium_lte: String
+  premium_gt: String
+  premium_gte: String
+  premium_contains: String
+  premium_not_contains: String
+  premium_starts_with: String
+  premium_not_starts_with: String
+  premium_ends_with: String
+  premium_not_ends_with: String
+  timeEnd: DateTime
+  timeEnd_not: DateTime
+  timeEnd_in: [DateTime!]
+  timeEnd_not_in: [DateTime!]
+  timeEnd_lt: DateTime
+  timeEnd_lte: DateTime
+  timeEnd_gt: DateTime
+  timeEnd_gte: DateTime
+  emailSend: String
+  emailSend_not: String
+  emailSend_in: [String!]
+  emailSend_not_in: [String!]
+  emailSend_lt: String
+  emailSend_lte: String
+  emailSend_gt: String
+  emailSend_gte: String
+  emailSend_contains: String
+  emailSend_not_contains: String
+  emailSend_starts_with: String
+  emailSend_not_starts_with: String
+  emailSend_ends_with: String
+  emailSend_not_ends_with: String
+  jury_every: UserWhereInput
+  jury_some: UserWhereInput
+  jury_none: UserWhereInput
+  group_every: GroupWhereInput
+  group_some: GroupWhereInput
+  group_none: GroupWhereInput
+  category_every: CategoryWhereInput
+  category_some: CategoryWhereInput
+  category_none: CategoryWhereInput
+  status: StatusChallegen
+  status_not: StatusChallegen
+  status_in: [StatusChallegen!]
+  status_not_in: [StatusChallegen!]
+  initiator: String
+  initiator_not: String
+  initiator_in: [String!]
+  initiator_not_in: [String!]
+  initiator_lt: String
+  initiator_lte: String
+  initiator_gt: String
+  initiator_gte: String
+  initiator_contains: String
+  initiator_not_contains: String
+  initiator_starts_with: String
+  initiator_not_starts_with: String
+  initiator_ends_with: String
+  initiator_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdBy: UserWhereInput
+  AND: [ChallengeWhereInput!]
+  OR: [ChallengeWhereInput!]
+  NOT: [ChallengeWhereInput!]
+}
+
+input ChallengeWhereUniqueInput {
+  id: ID
+  title: String
+}
+
 type Chat {
   id: ID!
   messages(where: ChatMessageWhereInput, orderBy: ChatMessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChatMessage!]
@@ -2049,6 +3225,204 @@ input ChatWhereUniqueInput {
   id: ID
 }
 
+type Contribution {
+  id: ID!
+  challengeID: Challenge
+  title: String!
+  description: String
+  image: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: User
+}
+
+type ContributionConnection {
+  pageInfo: PageInfo!
+  edges: [ContributionEdge]!
+  aggregate: AggregateContribution!
+}
+
+input ContributionCreateInput {
+  id: ID
+  challengeID: ChallengeCreateOneInput
+  title: String!
+  description: String
+  image: String
+  createdBy: UserCreateOneInput
+}
+
+input ContributionCreateOneInput {
+  create: ContributionCreateInput
+  connect: ContributionWhereUniqueInput
+}
+
+type ContributionEdge {
+  node: Contribution!
+  cursor: String!
+}
+
+enum ContributionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  image_ASC
+  image_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ContributionPreviousValues {
+  id: ID!
+  title: String!
+  description: String
+  image: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type ContributionSubscriptionPayload {
+  mutation: MutationType!
+  node: Contribution
+  updatedFields: [String!]
+  previousValues: ContributionPreviousValues
+}
+
+input ContributionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ContributionWhereInput
+  AND: [ContributionSubscriptionWhereInput!]
+  OR: [ContributionSubscriptionWhereInput!]
+  NOT: [ContributionSubscriptionWhereInput!]
+}
+
+input ContributionUpdateDataInput {
+  challengeID: ChallengeUpdateOneInput
+  title: String
+  description: String
+  image: String
+  createdBy: UserUpdateOneInput
+}
+
+input ContributionUpdateInput {
+  challengeID: ChallengeUpdateOneInput
+  title: String
+  description: String
+  image: String
+  createdBy: UserUpdateOneInput
+}
+
+input ContributionUpdateManyMutationInput {
+  title: String
+  description: String
+  image: String
+}
+
+input ContributionUpdateOneInput {
+  create: ContributionCreateInput
+  update: ContributionUpdateDataInput
+  upsert: ContributionUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ContributionWhereUniqueInput
+}
+
+input ContributionUpsertNestedInput {
+  update: ContributionUpdateDataInput!
+  create: ContributionCreateInput!
+}
+
+input ContributionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  challengeID: ChallengeWhereInput
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdBy: UserWhereInput
+  AND: [ContributionWhereInput!]
+  OR: [ContributionWhereInput!]
+  NOT: [ContributionWhereInput!]
+}
+
+input ContributionWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 type FavoriteActivity {
@@ -2503,6 +3877,520 @@ input GlobalSettingsWhereInput {
 
 input GlobalSettingsWhereUniqueInput {
   id: ID
+}
+
+type Group {
+  id: ID!
+  title: String!
+  description: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: User
+  challenge(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge!]
+}
+
+type GroupColor {
+  id: ID!
+  group: Group
+  color: String!
+}
+
+type GroupColorConnection {
+  pageInfo: PageInfo!
+  edges: [GroupColorEdge]!
+  aggregate: AggregateGroupColor!
+}
+
+input GroupColorCreateInput {
+  id: ID
+  group: GroupCreateOneInput
+  color: String!
+}
+
+type GroupColorEdge {
+  node: GroupColor!
+  cursor: String!
+}
+
+enum GroupColorOrderByInput {
+  id_ASC
+  id_DESC
+  color_ASC
+  color_DESC
+}
+
+type GroupColorPreviousValues {
+  id: ID!
+  color: String!
+}
+
+type GroupColorSubscriptionPayload {
+  mutation: MutationType!
+  node: GroupColor
+  updatedFields: [String!]
+  previousValues: GroupColorPreviousValues
+}
+
+input GroupColorSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupColorWhereInput
+  AND: [GroupColorSubscriptionWhereInput!]
+  OR: [GroupColorSubscriptionWhereInput!]
+  NOT: [GroupColorSubscriptionWhereInput!]
+}
+
+input GroupColorUpdateInput {
+  group: GroupUpdateOneInput
+  color: String
+}
+
+input GroupColorUpdateManyMutationInput {
+  color: String
+}
+
+input GroupColorWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  group: GroupWhereInput
+  color: String
+  color_not: String
+  color_in: [String!]
+  color_not_in: [String!]
+  color_lt: String
+  color_lte: String
+  color_gt: String
+  color_gte: String
+  color_contains: String
+  color_not_contains: String
+  color_starts_with: String
+  color_not_starts_with: String
+  color_ends_with: String
+  color_not_ends_with: String
+  AND: [GroupColorWhereInput!]
+  OR: [GroupColorWhereInput!]
+  NOT: [GroupColorWhereInput!]
+}
+
+input GroupColorWhereUniqueInput {
+  id: ID
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge]!
+  aggregate: AggregateGroup!
+}
+
+input GroupCreateInput {
+  id: ID
+  title: String!
+  description: String!
+  createdBy: UserCreateOneInput
+  challenge: ChallengeCreateManyWithoutGroupInput
+}
+
+input GroupCreateManyWithoutChallengeInput {
+  create: [GroupCreateWithoutChallengeInput!]
+  connect: [GroupWhereUniqueInput!]
+}
+
+input GroupCreateOneInput {
+  create: GroupCreateInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupCreateWithoutChallengeInput {
+  id: ID
+  title: String!
+  description: String!
+  createdBy: UserCreateOneInput
+}
+
+type GroupEdge {
+  node: Group!
+  cursor: String!
+}
+
+enum GroupOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GroupPreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input GroupScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [GroupScalarWhereInput!]
+  OR: [GroupScalarWhereInput!]
+  NOT: [GroupScalarWhereInput!]
+}
+
+type GroupSubscriptionPayload {
+  mutation: MutationType!
+  node: Group
+  updatedFields: [String!]
+  previousValues: GroupPreviousValues
+}
+
+input GroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupWhereInput
+  AND: [GroupSubscriptionWhereInput!]
+  OR: [GroupSubscriptionWhereInput!]
+  NOT: [GroupSubscriptionWhereInput!]
+}
+
+input GroupUpdateDataInput {
+  title: String
+  description: String
+  createdBy: UserUpdateOneInput
+  challenge: ChallengeUpdateManyWithoutGroupInput
+}
+
+input GroupUpdateInput {
+  title: String
+  description: String
+  createdBy: UserUpdateOneInput
+  challenge: ChallengeUpdateManyWithoutGroupInput
+}
+
+input GroupUpdateManyDataInput {
+  title: String
+  description: String
+}
+
+input GroupUpdateManyMutationInput {
+  title: String
+  description: String
+}
+
+input GroupUpdateManyWithoutChallengeInput {
+  create: [GroupCreateWithoutChallengeInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutChallengeInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutChallengeInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
+}
+
+input GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput!
+  data: GroupUpdateManyDataInput!
+}
+
+input GroupUpdateOneInput {
+  create: GroupCreateInput
+  update: GroupUpdateDataInput
+  upsert: GroupUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroupWhereUniqueInput
+}
+
+input GroupUpdateWithoutChallengeDataInput {
+  title: String
+  description: String
+  createdBy: UserUpdateOneInput
+}
+
+input GroupUpdateWithWhereUniqueWithoutChallengeInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutChallengeDataInput!
+}
+
+input GroupUpsertNestedInput {
+  update: GroupUpdateDataInput!
+  create: GroupCreateInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutChallengeInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutChallengeDataInput!
+  create: GroupCreateWithoutChallengeInput!
+}
+
+input GroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdBy: UserWhereInput
+  challenge_every: ChallengeWhereInput
+  challenge_some: ChallengeWhereInput
+  challenge_none: ChallengeWhereInput
+  AND: [GroupWhereInput!]
+  OR: [GroupWhereInput!]
+  NOT: [GroupWhereInput!]
+}
+
+input GroupWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+type Initiator {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+type InitiatorConnection {
+  pageInfo: PageInfo!
+  edges: [InitiatorEdge]!
+  aggregate: AggregateInitiator!
+}
+
+input InitiatorCreateInput {
+  id: ID
+  title: String!
+  description: String!
+}
+
+type InitiatorEdge {
+  node: Initiator!
+  cursor: String!
+}
+
+enum InitiatorOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+}
+
+type InitiatorPreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+type InitiatorSubscriptionPayload {
+  mutation: MutationType!
+  node: Initiator
+  updatedFields: [String!]
+  previousValues: InitiatorPreviousValues
+}
+
+input InitiatorSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: InitiatorWhereInput
+  AND: [InitiatorSubscriptionWhereInput!]
+  OR: [InitiatorSubscriptionWhereInput!]
+  NOT: [InitiatorSubscriptionWhereInput!]
+}
+
+input InitiatorUpdateInput {
+  title: String
+  description: String
+}
+
+input InitiatorUpdateManyMutationInput {
+  title: String
+  description: String
+}
+
+input InitiatorWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  AND: [InitiatorWhereInput!]
+  OR: [InitiatorWhereInput!]
+  NOT: [InitiatorWhereInput!]
+}
+
+input InitiatorWhereUniqueInput {
+  id: ID
+  title: String
 }
 
 type Ipaq {
@@ -3015,6 +4903,87 @@ input IpaqWhereUniqueInput {
   id: ID
 }
 
+type JoinedChallenges {
+  id: ID!
+  userId: User
+  challegeId: Challenge
+}
+
+type JoinedChallengesConnection {
+  pageInfo: PageInfo!
+  edges: [JoinedChallengesEdge]!
+  aggregate: AggregateJoinedChallenges!
+}
+
+input JoinedChallengesCreateInput {
+  id: ID
+  userId: UserCreateOneInput
+  challegeId: ChallengeCreateOneInput
+}
+
+type JoinedChallengesEdge {
+  node: JoinedChallenges!
+  cursor: String!
+}
+
+enum JoinedChallengesOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type JoinedChallengesPreviousValues {
+  id: ID!
+}
+
+type JoinedChallengesSubscriptionPayload {
+  mutation: MutationType!
+  node: JoinedChallenges
+  updatedFields: [String!]
+  previousValues: JoinedChallengesPreviousValues
+}
+
+input JoinedChallengesSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: JoinedChallengesWhereInput
+  AND: [JoinedChallengesSubscriptionWhereInput!]
+  OR: [JoinedChallengesSubscriptionWhereInput!]
+  NOT: [JoinedChallengesSubscriptionWhereInput!]
+}
+
+input JoinedChallengesUpdateInput {
+  userId: UserUpdateOneInput
+  challegeId: ChallengeUpdateOneInput
+}
+
+input JoinedChallengesWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  userId: UserWhereInput
+  challegeId: ChallengeWhereInput
+  AND: [JoinedChallengesWhereInput!]
+  OR: [JoinedChallengesWhereInput!]
+  NOT: [JoinedChallengesWhereInput!]
+}
+
+input JoinedChallengesWhereUniqueInput {
+  id: ID
+}
+
 scalar Json
 
 scalar Long
@@ -3026,6 +4995,12 @@ type Mutation {
   upsertActivity(where: ActivityWhereUniqueInput!, create: ActivityCreateInput!, update: ActivityUpdateInput!): Activity!
   deleteActivity(where: ActivityWhereUniqueInput!): Activity
   deleteManyActivities(where: ActivityWhereInput): BatchPayload!
+  createAward(data: AwardCreateInput!): Award!
+  updateAward(data: AwardUpdateInput!, where: AwardWhereUniqueInput!): Award
+  updateManyAwards(data: AwardUpdateManyMutationInput!, where: AwardWhereInput): BatchPayload!
+  upsertAward(where: AwardWhereUniqueInput!, create: AwardCreateInput!, update: AwardUpdateInput!): Award!
+  deleteAward(where: AwardWhereUniqueInput!): Award
+  deleteManyAwards(where: AwardWhereInput): BatchPayload!
   createBot(data: BotCreateInput!): Bot!
   updateBot(data: BotUpdateInput!, where: BotWhereUniqueInput!): Bot
   updateManyBots(data: BotUpdateManyMutationInput!, where: BotWhereInput): BatchPayload!
@@ -3055,6 +5030,28 @@ type Mutation {
   upsertCalendarEntry(where: CalendarEntryWhereUniqueInput!, create: CalendarEntryCreateInput!, update: CalendarEntryUpdateInput!): CalendarEntry!
   deleteCalendarEntry(where: CalendarEntryWhereUniqueInput!): CalendarEntry
   deleteManyCalendarEntries(where: CalendarEntryWhereInput): BatchPayload!
+  createCategory(data: CategoryCreateInput!): Category!
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  createChallenge(data: ChallengeCreateInput!): Challenge!
+  updateChallenge(data: ChallengeUpdateInput!, where: ChallengeWhereUniqueInput!): Challenge
+  updateManyChallenges(data: ChallengeUpdateManyMutationInput!, where: ChallengeWhereInput): BatchPayload!
+  upsertChallenge(where: ChallengeWhereUniqueInput!, create: ChallengeCreateInput!, update: ChallengeUpdateInput!): Challenge!
+  deleteChallenge(where: ChallengeWhereUniqueInput!): Challenge
+  deleteManyChallenges(where: ChallengeWhereInput): BatchPayload!
+  createChallengeCategory(data: ChallengeCategoryCreateInput!): ChallengeCategory!
+  updateChallengeCategory(data: ChallengeCategoryUpdateInput!, where: ChallengeCategoryWhereUniqueInput!): ChallengeCategory
+  upsertChallengeCategory(where: ChallengeCategoryWhereUniqueInput!, create: ChallengeCategoryCreateInput!, update: ChallengeCategoryUpdateInput!): ChallengeCategory!
+  deleteChallengeCategory(where: ChallengeCategoryWhereUniqueInput!): ChallengeCategory
+  deleteManyChallengeCategories(where: ChallengeCategoryWhereInput): BatchPayload!
+  createChallengeGroup(data: ChallengeGroupCreateInput!): ChallengeGroup!
+  updateChallengeGroup(data: ChallengeGroupUpdateInput!, where: ChallengeGroupWhereUniqueInput!): ChallengeGroup
+  upsertChallengeGroup(where: ChallengeGroupWhereUniqueInput!, create: ChallengeGroupCreateInput!, update: ChallengeGroupUpdateInput!): ChallengeGroup!
+  deleteChallengeGroup(where: ChallengeGroupWhereUniqueInput!): ChallengeGroup
+  deleteManyChallengeGroups(where: ChallengeGroupWhereInput): BatchPayload!
   createChat(data: ChatCreateInput!): Chat!
   updateChat(data: ChatUpdateInput!, where: ChatWhereUniqueInput!): Chat
   upsertChat(where: ChatWhereUniqueInput!, create: ChatCreateInput!, update: ChatUpdateInput!): Chat!
@@ -3072,6 +5069,12 @@ type Mutation {
   upsertChatMessageAttachment(where: ChatMessageAttachmentWhereUniqueInput!, create: ChatMessageAttachmentCreateInput!, update: ChatMessageAttachmentUpdateInput!): ChatMessageAttachment!
   deleteChatMessageAttachment(where: ChatMessageAttachmentWhereUniqueInput!): ChatMessageAttachment
   deleteManyChatMessageAttachments(where: ChatMessageAttachmentWhereInput): BatchPayload!
+  createContribution(data: ContributionCreateInput!): Contribution!
+  updateContribution(data: ContributionUpdateInput!, where: ContributionWhereUniqueInput!): Contribution
+  updateManyContributions(data: ContributionUpdateManyMutationInput!, where: ContributionWhereInput): BatchPayload!
+  upsertContribution(where: ContributionWhereUniqueInput!, create: ContributionCreateInput!, update: ContributionUpdateInput!): Contribution!
+  deleteContribution(where: ContributionWhereUniqueInput!): Contribution
+  deleteManyContributions(where: ContributionWhereInput): BatchPayload!
   createFavoriteActivity(data: FavoriteActivityCreateInput!): FavoriteActivity!
   updateFavoriteActivity(data: FavoriteActivityUpdateInput!, where: FavoriteActivityWhereUniqueInput!): FavoriteActivity
   updateManyFavoriteActivities(data: FavoriteActivityUpdateManyMutationInput!, where: FavoriteActivityWhereInput): BatchPayload!
@@ -3084,6 +5087,24 @@ type Mutation {
   upsertGlobalSettings(where: GlobalSettingsWhereUniqueInput!, create: GlobalSettingsCreateInput!, update: GlobalSettingsUpdateInput!): GlobalSettings!
   deleteGlobalSettings(where: GlobalSettingsWhereUniqueInput!): GlobalSettings
   deleteManyGlobalSettingses(where: GlobalSettingsWhereInput): BatchPayload!
+  createGroup(data: GroupCreateInput!): Group!
+  updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
+  updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
+  upsertGroup(where: GroupWhereUniqueInput!, create: GroupCreateInput!, update: GroupUpdateInput!): Group!
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteManyGroups(where: GroupWhereInput): BatchPayload!
+  createGroupColor(data: GroupColorCreateInput!): GroupColor!
+  updateGroupColor(data: GroupColorUpdateInput!, where: GroupColorWhereUniqueInput!): GroupColor
+  updateManyGroupColors(data: GroupColorUpdateManyMutationInput!, where: GroupColorWhereInput): BatchPayload!
+  upsertGroupColor(where: GroupColorWhereUniqueInput!, create: GroupColorCreateInput!, update: GroupColorUpdateInput!): GroupColor!
+  deleteGroupColor(where: GroupColorWhereUniqueInput!): GroupColor
+  deleteManyGroupColors(where: GroupColorWhereInput): BatchPayload!
+  createInitiator(data: InitiatorCreateInput!): Initiator!
+  updateInitiator(data: InitiatorUpdateInput!, where: InitiatorWhereUniqueInput!): Initiator
+  updateManyInitiators(data: InitiatorUpdateManyMutationInput!, where: InitiatorWhereInput): BatchPayload!
+  upsertInitiator(where: InitiatorWhereUniqueInput!, create: InitiatorCreateInput!, update: InitiatorUpdateInput!): Initiator!
+  deleteInitiator(where: InitiatorWhereUniqueInput!): Initiator
+  deleteManyInitiators(where: InitiatorWhereInput): BatchPayload!
   createIpaq(data: IpaqCreateInput!): Ipaq!
   updateIpaq(data: IpaqUpdateInput!, where: IpaqWhereUniqueInput!): Ipaq
   updateManyIpaqs(data: IpaqUpdateManyMutationInput!, where: IpaqWhereInput): BatchPayload!
@@ -3096,6 +5117,11 @@ type Mutation {
   upsertIpaqAnswers(where: IpaqAnswersWhereUniqueInput!, create: IpaqAnswersCreateInput!, update: IpaqAnswersUpdateInput!): IpaqAnswers!
   deleteIpaqAnswers(where: IpaqAnswersWhereUniqueInput!): IpaqAnswers
   deleteManyIpaqAnswerses(where: IpaqAnswersWhereInput): BatchPayload!
+  createJoinedChallenges(data: JoinedChallengesCreateInput!): JoinedChallenges!
+  updateJoinedChallenges(data: JoinedChallengesUpdateInput!, where: JoinedChallengesWhereUniqueInput!): JoinedChallenges
+  upsertJoinedChallenges(where: JoinedChallengesWhereUniqueInput!, create: JoinedChallengesCreateInput!, update: JoinedChallengesUpdateInput!): JoinedChallenges!
+  deleteJoinedChallenges(where: JoinedChallengesWhereUniqueInput!): JoinedChallenges
+  deleteManyJoinedChallengeses(where: JoinedChallengesWhereInput): BatchPayload!
   createPatient(data: PatientCreateInput!): Patient!
   updatePatient(data: PatientUpdateInput!, where: PatientWhereUniqueInput!): Patient
   updateManyPatients(data: PatientUpdateManyMutationInput!, where: PatientWhereInput): BatchPayload!
@@ -3155,6 +5181,12 @@ type Mutation {
   upsertUserSettings(where: UserSettingsWhereUniqueInput!, create: UserSettingsCreateInput!, update: UserSettingsUpdateInput!): UserSettings!
   deleteUserSettings(where: UserSettingsWhereUniqueInput!): UserSettings
   deleteManyUserSettingses(where: UserSettingsWhereInput): BatchPayload!
+  createVoting(data: VotingCreateInput!): Voting!
+  updateVoting(data: VotingUpdateInput!, where: VotingWhereUniqueInput!): Voting
+  updateManyVotings(data: VotingUpdateManyMutationInput!, where: VotingWhereInput): BatchPayload!
+  upsertVoting(where: VotingWhereUniqueInput!, create: VotingCreateInput!, update: VotingUpdateInput!): Voting!
+  deleteVoting(where: VotingWhereUniqueInput!): Voting
+  deleteManyVotings(where: VotingWhereInput): BatchPayload!
   createWebPushNotification(data: WebPushNotificationCreateInput!): WebPushNotification!
   updateWebPushNotification(data: WebPushNotificationUpdateInput!, where: WebPushNotificationWhereUniqueInput!): WebPushNotification
   updateManyWebPushNotifications(data: WebPushNotificationUpdateManyMutationInput!, where: WebPushNotificationWhereInput): BatchPayload!
@@ -4361,6 +6393,9 @@ type Query {
   activity(where: ActivityWhereUniqueInput!): Activity
   activities(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity]!
   activitiesConnection(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActivityConnection!
+  award(where: AwardWhereUniqueInput!): Award
+  awards(where: AwardWhereInput, orderBy: AwardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Award]!
+  awardsConnection(where: AwardWhereInput, orderBy: AwardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AwardConnection!
   bot(where: BotWhereUniqueInput!): Bot
   bots(where: BotWhereInput, orderBy: BotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bot]!
   botsConnection(where: BotWhereInput, orderBy: BotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BotConnection!
@@ -4376,6 +6411,18 @@ type Query {
   calendarEntry(where: CalendarEntryWhereUniqueInput!): CalendarEntry
   calendarEntries(where: CalendarEntryWhereInput, orderBy: CalendarEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CalendarEntry]!
   calendarEntriesConnection(where: CalendarEntryWhereInput, orderBy: CalendarEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CalendarEntryConnection!
+  category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
+  categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
+  challenge(where: ChallengeWhereUniqueInput!): Challenge
+  challenges(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Challenge]!
+  challengesConnection(where: ChallengeWhereInput, orderBy: ChallengeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeConnection!
+  challengeCategory(where: ChallengeCategoryWhereUniqueInput!): ChallengeCategory
+  challengeCategories(where: ChallengeCategoryWhereInput, orderBy: ChallengeCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeCategory]!
+  challengeCategoriesConnection(where: ChallengeCategoryWhereInput, orderBy: ChallengeCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeCategoryConnection!
+  challengeGroup(where: ChallengeGroupWhereUniqueInput!): ChallengeGroup
+  challengeGroups(where: ChallengeGroupWhereInput, orderBy: ChallengeGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeGroup]!
+  challengeGroupsConnection(where: ChallengeGroupWhereInput, orderBy: ChallengeGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChallengeGroupConnection!
   chat(where: ChatWhereUniqueInput!): Chat
   chats(where: ChatWhereInput, orderBy: ChatOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Chat]!
   chatsConnection(where: ChatWhereInput, orderBy: ChatOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChatConnection!
@@ -4385,18 +6432,33 @@ type Query {
   chatMessageAttachment(where: ChatMessageAttachmentWhereUniqueInput!): ChatMessageAttachment
   chatMessageAttachments(where: ChatMessageAttachmentWhereInput, orderBy: ChatMessageAttachmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChatMessageAttachment]!
   chatMessageAttachmentsConnection(where: ChatMessageAttachmentWhereInput, orderBy: ChatMessageAttachmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChatMessageAttachmentConnection!
+  contribution(where: ContributionWhereUniqueInput!): Contribution
+  contributions(where: ContributionWhereInput, orderBy: ContributionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Contribution]!
+  contributionsConnection(where: ContributionWhereInput, orderBy: ContributionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ContributionConnection!
   favoriteActivity(where: FavoriteActivityWhereUniqueInput!): FavoriteActivity
   favoriteActivities(where: FavoriteActivityWhereInput, orderBy: FavoriteActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FavoriteActivity]!
   favoriteActivitiesConnection(where: FavoriteActivityWhereInput, orderBy: FavoriteActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteActivityConnection!
   globalSettings(where: GlobalSettingsWhereUniqueInput!): GlobalSettings
   globalSettingses(where: GlobalSettingsWhereInput, orderBy: GlobalSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GlobalSettings]!
   globalSettingsesConnection(where: GlobalSettingsWhereInput, orderBy: GlobalSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalSettingsConnection!
+  group(where: GroupWhereUniqueInput!): Group
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
+  groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
+  groupColor(where: GroupColorWhereUniqueInput!): GroupColor
+  groupColors(where: GroupColorWhereInput, orderBy: GroupColorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroupColor]!
+  groupColorsConnection(where: GroupColorWhereInput, orderBy: GroupColorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupColorConnection!
+  initiator(where: InitiatorWhereUniqueInput!): Initiator
+  initiators(where: InitiatorWhereInput, orderBy: InitiatorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Initiator]!
+  initiatorsConnection(where: InitiatorWhereInput, orderBy: InitiatorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InitiatorConnection!
   ipaq(where: IpaqWhereUniqueInput!): Ipaq
   ipaqs(where: IpaqWhereInput, orderBy: IpaqOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ipaq]!
   ipaqsConnection(where: IpaqWhereInput, orderBy: IpaqOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): IpaqConnection!
   ipaqAnswers(where: IpaqAnswersWhereUniqueInput!): IpaqAnswers
   ipaqAnswerses(where: IpaqAnswersWhereInput, orderBy: IpaqAnswersOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [IpaqAnswers]!
   ipaqAnswersesConnection(where: IpaqAnswersWhereInput, orderBy: IpaqAnswersOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): IpaqAnswersConnection!
+  joinedChallenges(where: JoinedChallengesWhereUniqueInput!): JoinedChallenges
+  joinedChallengeses(where: JoinedChallengesWhereInput, orderBy: JoinedChallengesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JoinedChallenges]!
+  joinedChallengesesConnection(where: JoinedChallengesWhereInput, orderBy: JoinedChallengesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JoinedChallengesConnection!
   patient(where: PatientWhereUniqueInput!): Patient
   patients(where: PatientWhereInput, orderBy: PatientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Patient]!
   patientsConnection(where: PatientWhereInput, orderBy: PatientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PatientConnection!
@@ -4427,6 +6489,9 @@ type Query {
   userSettings(where: UserSettingsWhereUniqueInput!): UserSettings
   userSettingses(where: UserSettingsWhereInput, orderBy: UserSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserSettings]!
   userSettingsesConnection(where: UserSettingsWhereInput, orderBy: UserSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserSettingsConnection!
+  voting(where: VotingWhereUniqueInput!): Voting
+  votings(where: VotingWhereInput, orderBy: VotingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Voting]!
+  votingsConnection(where: VotingWhereInput, orderBy: VotingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VotingConnection!
   webPushNotification(where: WebPushNotificationWhereUniqueInput!): WebPushNotification
   webPushNotifications(where: WebPushNotificationWhereInput, orderBy: WebPushNotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WebPushNotification]!
   webPushNotificationsConnection(where: WebPushNotificationWhereInput, orderBy: WebPushNotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WebPushNotificationConnection!
@@ -5150,20 +7215,36 @@ input SensorDataWhereUniqueInput {
   id: ID
 }
 
+enum StatusChallegen {
+  ERSTELLT
+  GESTARTED
+  BEENDET
+}
+
 type Subscription {
   activity(where: ActivitySubscriptionWhereInput): ActivitySubscriptionPayload
+  award(where: AwardSubscriptionWhereInput): AwardSubscriptionPayload
   bot(where: BotSubscriptionWhereInput): BotSubscriptionPayload
   botSettings(where: BotSettingsSubscriptionWhereInput): BotSettingsSubscriptionPayload
   buddy(where: BuddySubscriptionWhereInput): BuddySubscriptionPayload
   buddyRequest(where: BuddyRequestSubscriptionWhereInput): BuddyRequestSubscriptionPayload
   calendarEntry(where: CalendarEntrySubscriptionWhereInput): CalendarEntrySubscriptionPayload
+  category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
+  challenge(where: ChallengeSubscriptionWhereInput): ChallengeSubscriptionPayload
+  challengeCategory(where: ChallengeCategorySubscriptionWhereInput): ChallengeCategorySubscriptionPayload
+  challengeGroup(where: ChallengeGroupSubscriptionWhereInput): ChallengeGroupSubscriptionPayload
   chat(where: ChatSubscriptionWhereInput): ChatSubscriptionPayload
   chatMessage(where: ChatMessageSubscriptionWhereInput): ChatMessageSubscriptionPayload
   chatMessageAttachment(where: ChatMessageAttachmentSubscriptionWhereInput): ChatMessageAttachmentSubscriptionPayload
+  contribution(where: ContributionSubscriptionWhereInput): ContributionSubscriptionPayload
   favoriteActivity(where: FavoriteActivitySubscriptionWhereInput): FavoriteActivitySubscriptionPayload
   globalSettings(where: GlobalSettingsSubscriptionWhereInput): GlobalSettingsSubscriptionPayload
+  group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
+  groupColor(where: GroupColorSubscriptionWhereInput): GroupColorSubscriptionPayload
+  initiator(where: InitiatorSubscriptionWhereInput): InitiatorSubscriptionPayload
   ipaq(where: IpaqSubscriptionWhereInput): IpaqSubscriptionPayload
   ipaqAnswers(where: IpaqAnswersSubscriptionWhereInput): IpaqAnswersSubscriptionPayload
+  joinedChallenges(where: JoinedChallengesSubscriptionWhereInput): JoinedChallengesSubscriptionPayload
   patient(where: PatientSubscriptionWhereInput): PatientSubscriptionPayload
   patientProfileInfo(where: PatientProfileInfoSubscriptionWhereInput): PatientProfileInfoSubscriptionPayload
   phq9(where: Phq9SubscriptionWhereInput): Phq9SubscriptionPayload
@@ -5174,6 +7255,7 @@ type Subscription {
   timeSpan(where: TimeSpanSubscriptionWhereInput): TimeSpanSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   userSettings(where: UserSettingsSubscriptionWhereInput): UserSettingsSubscriptionPayload
+  voting(where: VotingSubscriptionWhereInput): VotingSubscriptionPayload
   webPushNotification(where: WebPushNotificationSubscriptionWhereInput): WebPushNotificationSubscriptionPayload
   webPushSettings(where: WebPushSettingsSubscriptionWhereInput): WebPushSettingsSubscriptionPayload
 }
@@ -5406,6 +7488,11 @@ input UserCreateInput {
   lastActive: DateTime
 }
 
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -5463,6 +7550,82 @@ enum UserRole {
   DOCTOR
   PATIENT
   USER
+}
+
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  role: UserRole
+  role_not: UserRole
+  role_in: [UserRole!]
+  role_not_in: [UserRole!]
+  lastActive: DateTime
+  lastActive_not: DateTime
+  lastActive_in: [DateTime!]
+  lastActive_not_in: [DateTime!]
+  lastActive_lt: DateTime
+  lastActive_lte: DateTime
+  lastActive_gt: DateTime
+  lastActive_gte: DateTime
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
 }
 
 type UserSettings {
@@ -5623,11 +7786,35 @@ input UserUpdateInput {
   lastActive: DateTime
 }
 
+input UserUpdateManyDataInput {
+  username: String
+  password: String
+  role: UserRole
+  lastActive: DateTime
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
 input UserUpdateManyMutationInput {
   username: String
   password: String
   role: UserRole
   lastActive: DateTime
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
 }
 
 input UserUpdateOneInput {
@@ -5657,6 +7844,11 @@ input UserUpdateWithoutPatientDataInput {
   lastActive: DateTime
 }
 
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
+}
+
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
@@ -5665,6 +7857,12 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutPatientInput {
   update: UserUpdateWithoutPatientDataInput!
   create: UserCreateWithoutPatientInput!
+}
+
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
@@ -5751,6 +7949,203 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   username: String
+}
+
+type Voting {
+  id: ID!
+  challengeID: Challenge
+  contributionID: Contribution
+  title: String!
+  description: String
+  votedPoint: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: User
+}
+
+type VotingConnection {
+  pageInfo: PageInfo!
+  edges: [VotingEdge]!
+  aggregate: AggregateVoting!
+}
+
+input VotingCreateInput {
+  id: ID
+  challengeID: ChallengeCreateOneInput
+  contributionID: ContributionCreateOneInput
+  title: String!
+  description: String
+  votedPoint: Int
+  createdBy: UserCreateOneInput
+}
+
+input VotingCreateOneInput {
+  create: VotingCreateInput
+  connect: VotingWhereUniqueInput
+}
+
+type VotingEdge {
+  node: Voting!
+  cursor: String!
+}
+
+enum VotingOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  votedPoint_ASC
+  votedPoint_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type VotingPreviousValues {
+  id: ID!
+  title: String!
+  description: String
+  votedPoint: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type VotingSubscriptionPayload {
+  mutation: MutationType!
+  node: Voting
+  updatedFields: [String!]
+  previousValues: VotingPreviousValues
+}
+
+input VotingSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VotingWhereInput
+  AND: [VotingSubscriptionWhereInput!]
+  OR: [VotingSubscriptionWhereInput!]
+  NOT: [VotingSubscriptionWhereInput!]
+}
+
+input VotingUpdateDataInput {
+  challengeID: ChallengeUpdateOneInput
+  contributionID: ContributionUpdateOneInput
+  title: String
+  description: String
+  votedPoint: Int
+  createdBy: UserUpdateOneInput
+}
+
+input VotingUpdateInput {
+  challengeID: ChallengeUpdateOneInput
+  contributionID: ContributionUpdateOneInput
+  title: String
+  description: String
+  votedPoint: Int
+  createdBy: UserUpdateOneInput
+}
+
+input VotingUpdateManyMutationInput {
+  title: String
+  description: String
+  votedPoint: Int
+}
+
+input VotingUpdateOneInput {
+  create: VotingCreateInput
+  update: VotingUpdateDataInput
+  upsert: VotingUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: VotingWhereUniqueInput
+}
+
+input VotingUpsertNestedInput {
+  update: VotingUpdateDataInput!
+  create: VotingCreateInput!
+}
+
+input VotingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  challengeID: ChallengeWhereInput
+  contributionID: ContributionWhereInput
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  votedPoint: Int
+  votedPoint_not: Int
+  votedPoint_in: [Int!]
+  votedPoint_not_in: [Int!]
+  votedPoint_lt: Int
+  votedPoint_lte: Int
+  votedPoint_gt: Int
+  votedPoint_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdBy: UserWhereInput
+  AND: [VotingWhereInput!]
+  OR: [VotingWhereInput!]
+  NOT: [VotingWhereInput!]
+}
+
+input VotingWhereUniqueInput {
+  id: ID
 }
 
 type WebPushNotification {

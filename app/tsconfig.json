@@ -24,18 +24,18 @@
       },
       {
         "name": "@divyenduz/ts-graphql-plugin"
-      },
-    ],
+      }
+    ]
   },
   "compileOnSave": true,
   "include": [
-    "./src/**/*", 
+    "./src/**/*"
   ],
   "exclude": [
     "**/node_modules/**",
     "**/dist/**"
   ],
   "tslint.exclude": [
-    "./src/generated**",
+    "./src/generated**"
   ]
 }

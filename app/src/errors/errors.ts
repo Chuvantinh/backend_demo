@@ -1,4 +1,3 @@
-
 import { ApolloError } from 'apollo-server';
 
 export class SyntaxError extends ApolloError {

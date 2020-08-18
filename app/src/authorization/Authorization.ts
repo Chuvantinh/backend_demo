@@ -20,7 +20,7 @@ const assertAlive = (decoded: any) => {
 export const verifyAuthKey = async (authHeader: { authToken: string }, tokenRequired = true) => {
   // logA.info(`Token exists: ${(!!authHeader.authToken)}`);
   // logA.info(`Token required: ${(tokenRequired)}`);
-  // console.log(`authHeader.authToken: ${JSON.stringify(authHeader.authToken)}`);
+  //   console.log(`authHeader.authToken: ${JSON.stringify(authHeader.authToken)}`);
 
   if (authHeader.authToken) {
     const token = authHeader.authToken.replace('Bearer ', '');

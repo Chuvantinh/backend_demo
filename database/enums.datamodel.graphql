@@ -84,3 +84,15 @@ enum ActivityGrade {
   MODERATE,
   HARD,
 }
+
+enum StatusChallegen{
+  ERSTELLT,
+  GESTARTED,
+  BEENDET
+}
+
+enum AwardVT{
+  GOLD,
+  SILBER,
+  BRONZ
+}
