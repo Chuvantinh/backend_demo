@@ -21,10 +21,11 @@ ENV NODE_ENV ${NODE_ENV}
 RUN echo $NODE_ENV
 
 # setup npm proxies to make install possible
-RUN git config --global http.proxy http://proxy.charite.de:8080/ && \
-    npm config set strict-ssl=false \
-    npm config set proxy=http://proxy.charite.de:8080/ && \
-    npm config set https-proxy=http://proxy.charite.de:8080/
+# I can not run it
+# RUN git config --global http.proxy http://proxy.charite.de:8080/ && \
+#    npm config set strict-ssl=false \
+#    npm config set proxy=http://proxy.charite.de:8080/ && \
+#    npm config set https-proxy=http://proxy.charite.de:8080/
 
 RUN npm set unsafe-perm true
 

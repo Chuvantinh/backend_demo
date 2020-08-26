@@ -7,7 +7,7 @@ import { Context, AuthPayload } from '../types';
 import { log, logA, logFormat } from '../logger';
 import { APP_PRIVATE_KEY, TOKEN_EXPIRY_TIME, VAPID_PUBLIC_KEY } from '../config/env.config';
 import { UserUpdateInput, UserCreateInput, UserRole, TaskTypes, Buddy, User, WebPushNotification } from '../generated/prisma-client';
-import { RegistrationError, LoginError } from '../errors/errors';
+// import { RegistrationError, LoginError } from '../errors/errors';
 import { UserInputError } from 'apollo-server';
 import { taskScheduler } from '../tasks/tasks';
 import { notification } from '../services/notification/NotificationService';
@@ -114,8 +114,9 @@ export const UserMutationResolver: Pick<
   createAppUser: async (root, { username, verificationCode, role }, ctx: Context) => {
     const userExists = await ctx.db.$exists.user({ username });
     if (userExists) {
-      const e = new RegistrationError('User already Exists');
-      log.error(`User with Name  ${username} already Exists`, e);
+      //const e = new RegistrationError('User already Exists');
+      const  e = undefined;
+        log.error(`User with Name  ${username} already Exists`, e);
       return undefined;
     }
 
@@ -196,22 +197,28 @@ export const UserMutationResolver: Pick<
   },
 
   login: async (root, { username, password }, ctx: Context) => {
-    log.info('login ' + JSON.stringify(username));
-    const user = await ctx.db.user({ username });
-
+    // log.info('Login username is :  ' + JSON.stringify(username));
+     //  log.info(`login2`);
+      console.log(ctx);
+     const user = await ctx.db.user({ username });
+     
     if (!user) {
-      throw new LoginError(`Login Failed`);
+      console.log("no user found");
+      //log.info(`login loi`);
+      // throw new LoginError(`Login Failed`);
     }
 
     const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
-      throw new LoginError(`Login Failed`);
+      console.log("invalid the password in login  mutation");
+      //throw new LoginError(`Login Failed`);
     }
 
     const authPayload: AuthPayload = {
       user,
-      token: jwt.sign({ userId: user.id },
+      token: jwt.sign(
+          { userId: user.id },
         APP_PRIVATE_KEY, {
         // algorithm: 'RS256', // process.env.TOKEN_ALGORITHM,
         expiresIn: TOKEN_EXPIRY_TIME

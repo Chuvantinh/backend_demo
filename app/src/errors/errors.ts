@@ -1,6 +1,7 @@
-import { ApolloError } from 'apollo-server';
+// import { ApolloError } from 'apollo-server';
 
-export class SyntaxError extends ApolloError {
+// question here : https://github.com/apollographql/apollo-server/issues/1304
+/*export class SyntaxError extends ApolloError {
   constructor(message: string) {
     super(message, 'GRAPHQL_PARSE_FAILED');
 
@@ -22,4 +23,4 @@ export class RegistrationError extends ApolloError {
 
     Object.defineProperty(this, 'name', { value: 'RegistrationError' });
   }
-}
+}*/

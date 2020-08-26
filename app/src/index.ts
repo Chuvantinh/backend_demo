@@ -10,7 +10,13 @@ import { ENDPOINT,PORT, TOKEN_EXPIRY_TIME, DEBUG, PLAYGROUND, ALLOW_INTROSPECTIO
 import { Context } from './types';
 import { getGlobalSettings, getGlobalSettingsId } from './global_settings/global.settings';
 import { taskScheduler } from './tasks/tasks';
+import {typeDefs} from "./generated/prisma-client/prisma-schema";
 
+import {
+    makeExecutableSchema,
+    addMockFunctionsToSchema,
+    mergeSchemas,
+}from 'graphql-tools';
 
 // const typeDefs = gql(importSchema('./src/schema/schema.graphql'));
 // const resolvers = importResolvers as any;
@@ -19,18 +25,39 @@ import { taskScheduler } from './tasks/tasks';
 //   resolvers,
 //   resolverValidationOptions: { requireResolversForResolveType: false },
 // });
+
+// mock 2 schema together one
+// https://www.apollographql.com/docs/apollo-server/features/schema-stitching/
+const shema1 = makeExecutableSchema({
+    typeDefs : gql(importSchema('./src/schema/schema.graphql'))
+})
+
+const shema2 = makeExecutableSchema({
+    typeDefs : gql(importSchema('./src/generated/schema/prisma.graphql'))
+})
+
+addMockFunctionsToSchema({ schema: shema1 });
+addMockFunctionsToSchema({ schema: shema2 });
+
+const mergedSchema = mergeSchemas({
+    schemas: [
+        shema1,
+        shema2
+    ],
+    resolvers: importResolvers
+});
+
 // let CONFIG_DEPLOYED: boolean = false;
 
 export async function main() {
 
   const tasker = taskScheduler;
   await tasker.restoreTasks(prisma);
-  console.log(ENDPOINT);
   // see https://github.com/apollographql/apollo-server/issues/2315 for sample
+
   let server: ApolloServer = new ApolloServer({
-    // schema,
-    typeDefs: gql(importSchema('./src/schema/schema.graphql')),
-    resolvers: importResolvers as any,
+      schema: mergedSchema,
+    //typeDefs: gql(importSchema('./src/schema/schema.graphql')),
     context: async ({ req, connection }: any): Promise<Context> => {
       let header = { authToken: '' };
       if (connection) {
@@ -38,15 +65,25 @@ export async function main() {
       } else {
         header.authToken = req.headers.authorization
       }
-      console.log(header);
-      // check if operation is excepted from auth
-      let authRequired = true;
-      if (req && req.body && req.body.query) {
-        authRequired = await operationAuthorized(req.body.query);
+
+      let uid;
+      if(header.authToken != undefined){
+          // check if operation is excepted from auth
+          let authRequired = true;
+          if (req && req.body && req.body.query) {
+              // function is wrong cho nay bi sai
+              authRequired = await operationAuthorized(req.body.query);
+              //console.log("authRequired" + authRequired);
+          }
+            console.log(authRequired)
+           uid = await verifyAuthKey(header, authRequired);
+          // const uid = "ckcys3hcg001v0719yxusdh52";
+          //log.info(`user role : ${uid}`);
+      }else{
+           uid = undefined;
       }
 
-      const uid = await verifyAuthKey(header, authRequired);
-      console.log('uid' + uid);
+
       return {
         db: prisma,
         userId: uid,
@@ -80,6 +117,7 @@ export async function main() {
 
 
   return server.listen({ port: PORT || 4000 }).then((s) => {
+    log.info(`Port of server is ${PORT}`);
     log.info(`GraphQL endpoint ready at ${s.url}`);
     log.info(`Subscriptions ready at ${s.subscriptionsUrl}`);
     log.info(`DEBUG Mode ${DEBUG}`);

@@ -41,6 +41,7 @@
   },
   "homepage": "https://gitlab.com/aid-project/buddybackend#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "apollo-server": "^2.16.0",
     "async-each": "1.0.3",
     "bcryptjs": "^2.4.3",
@@ -60,6 +61,9 @@
     "web-push": "^3.3.4"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.4",
+    "@babel/preset-env": "^7.11.0",
     "@playlyfe/gql": "^2.6.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.3.5",

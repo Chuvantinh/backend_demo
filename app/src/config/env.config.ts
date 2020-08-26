@@ -3,11 +3,12 @@ import * as env from 'env-var';
 const dotenv = require('dotenv');
 
 dotenv.config();
-const ENDPOINT: string = env.get('PRISMA_ENDPOINT').required().asUrlString();
-//const ENDPOINT: string = "http://localhost:4477";
+// const ENDPOINT: string = env.get('PRISMA_ENDPOINT').required().asUrlString();
+const ENDPOINT: string = "http://localhost:4477";
 const PORT = env.get('SERVER_PORT').required().asString();
-// const API_SECRET = env.get('PRISMA_MANAGEMENT_API_SECRET').asString();
+const API_SECRET = env.get('PRISMA_MANAGEMENT_API_SECRET').asString();
 const APP_PRIVATE_KEY = env.get('APP_PRIVATE_KEY').asString();
+//const APP_PRIVATE_KEY = "private-key";
 const VAPID_PUBLIC_KEY = env.get('VAPID_PUBLIC_KEY').asString();
 const VAPID_PRIVATE_KEY = env.get('VAPID_PRIVATE_KEY').asString();
 const TOKEN_EXPIRY_TIME = env.get('TOKEN_EXPIRY_TIME').asString();
