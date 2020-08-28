@@ -10,7 +10,6 @@ import { ENDPOINT,PORT, TOKEN_EXPIRY_TIME, DEBUG, PLAYGROUND, ALLOW_INTROSPECTIO
 import { Context } from './types';
 import { getGlobalSettings, getGlobalSettingsId } from './global_settings/global.settings';
 import { taskScheduler } from './tasks/tasks';
-import {typeDefs} from "./generated/prisma-client/prisma-schema";
 
 import {
     makeExecutableSchema,
@@ -18,25 +17,26 @@ import {
     mergeSchemas,
 }from 'graphql-tools';
 
-// const typeDefs = gql(importSchema('./src/schema/schema.graphql'));
-// const resolvers = importResolvers as any;
-// const schema = makeExecutableSchema({
-//   typeDefs,
-//   resolvers,
-//   resolverValidationOptions: { requireResolversForResolveType: false },
-// });
+const mocks = {
+    DateTime: () => {
+        return new Date();
+    },
+};
+
 
 // mock 2 schema together one
 // https://www.apollographql.com/docs/apollo-server/features/schema-stitching/
+
 const shema1 = makeExecutableSchema({
     typeDefs : gql(importSchema('./src/schema/schema.graphql'))
 })
+addMockFunctionsToSchema({ schema: shema1 });
 
+// https://www.graphql-tools.com/docs/generate-schema/#example
 const shema2 = makeExecutableSchema({
     typeDefs : gql(importSchema('./src/generated/schema/prisma.graphql'))
 })
 
-addMockFunctionsToSchema({ schema: shema1 });
 addMockFunctionsToSchema({ schema: shema2 });
 
 const mergedSchema = mergeSchemas({
@@ -44,7 +44,7 @@ const mergedSchema = mergeSchemas({
         shema1,
         shema2
     ],
-    resolvers: importResolvers
+    resolvers: importResolvers as any
 });
 
 // let CONFIG_DEPLOYED: boolean = false;
@@ -55,41 +55,34 @@ export async function main() {
   await tasker.restoreTasks(prisma);
   // see https://github.com/apollographql/apollo-server/issues/2315 for sample
 
-  let server: ApolloServer = new ApolloServer({
-      schema: mergedSchema,
-    //typeDefs: gql(importSchema('./src/schema/schema.graphql')),
+      let server: ApolloServer = new ApolloServer({
+          schema: mergedSchema,
+        //typeDefs: gql(importSchema('./src/schema/schema.graphql')),
+           mocks: mocks,
+            mockEntireSchema: false,
     context: async ({ req, connection }: any): Promise<Context> => {
-      let header = { authToken: '' };
-      if (connection) {
-        header = connection.context;
-      } else {
-        header.authToken = req.headers.authorization
-      }
+        let header = { authToken: '' };
+        if (connection) {
+            header = connection.context;
+        } else {
+            header.authToken = req.headers.authorization
+        }
+        // check if operation is excepted from auth
+        // let authRequired = true;
+        let authRequired = false;
+        if (req && req.body && req.body.query) {
+            // authRequired = await operationAuthorized(req.body.query);
+        }
+        console.log('autheRequired is ' + authRequired);
 
-      let uid;
-      if(header.authToken != undefined){
-          // check if operation is excepted from auth
-          let authRequired = true;
-          if (req && req.body && req.body.query) {
-              // function is wrong cho nay bi sai
-              authRequired = await operationAuthorized(req.body.query);
-              //console.log("authRequired" + authRequired);
-          }
-            console.log(authRequired)
-           uid = await verifyAuthKey(header, authRequired);
-          // const uid = "ckcys3hcg001v0719yxusdh52";
-          //log.info(`user role : ${uid}`);
-      }else{
-           uid = undefined;
-      }
+        const uid = await verifyAuthKey(header, authRequired);
+        return {
+            db: prisma,
+            userId: uid,
+            role: await getUserRole(uid, prisma),
+            settingsId: await getGlobalSettingsId(prisma),
+        };
 
-
-      return {
-        db: prisma,
-        userId: uid,
-        role: await getUserRole(uid, prisma),
-        settingsId: await getGlobalSettingsId(prisma),
-      };
     },
     subscriptions: {
       onConnect: async (connectionParams: any) => {

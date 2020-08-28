@@ -42,9 +42,11 @@
   "homepage": "https://gitlab.com/aid-project/buddybackend#readme",
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
+    "@graphql-tools/mock": "^6.1.0",
     "apollo-server": "^2.16.0",
     "async-each": "1.0.3",
     "bcryptjs": "^2.4.3",
+    "casual": "^1.6.2",
     "clone": "^2.1.2",
     "dotenv": "^8.2.0",
     "env-var": "^5.1.0",

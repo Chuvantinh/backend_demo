@@ -17,43 +17,24 @@ const assertAlive = (decoded: any) => {
   }
 }
 
-export const verifyAuthKey = async (authHeader: { authToken: string }, tokenRequired = true) => {
+export const verifyAuthKey = async (authHeader: { authToken: string }, tokenRequired) => {
    logA.info(`Token exists: ${(authHeader.authToken)}`);
-    tokenRequired = true;
    logA.info(`Token required: ${(tokenRequired)}`);
-    // log.info(`verify key1 : ${authHeader.authToken}`);
-  if (authHeader.authToken) {
-    const token = authHeader.authToken.replace('Bearer ', '');
-
-    //console.log('token' + token);
-
-    const decoded_vt =  jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJja2N5czZhanIwMDJzMDcxOXBha2J1bzVkIiwiaWF0IjoxNTk4MjczNjc1LCJleHAiOjE1OTgzNjAwNzV9.rvzBjJ5eXoLdUaReyZl2r9jG9DYiTNvKBVxO5QbG7XI",
-        APP_PRIVATE_KEY, (err, verifiedJwt) => {
-          if(err){
-              console.log(err.message)
-          }else{
-              console.log(verifiedJwt)
-          }
-      });
-      console.log(decoded_vt);
-
+  if (tokenRequired) {
     try {
+      const token = authHeader.authToken.replace('Bearer ', '');
       const decoded = jwt.verify(token, APP_PRIVATE_KEY, (err, user) => {
         if(err) throw new AuthenticationError('Token expired' + err);
       });
-      logA.info(`decoded key: ${JSON.stringify(decoded)}`);
+        logA.info(`decoded key: ${JSON.stringify(decoded)}`);
       try {
-
         assertAlive(token)
       } catch (error) {
-        // logA.error('Token expired', error);
         throw new AuthenticationError('Token expired' + error);
       }
       return (decoded as any).userId;
     } catch (error) {
-      //logA.warn('Token verification failed ');
-
-      throw new AuthenticationError('Token verification failed');
+      throw new AuthenticationError('Token verification failed and token is ' + authHeader.authToken);
     }
   } else {
     if (tokenRequired) {
@@ -61,7 +42,6 @@ export const verifyAuthKey = async (authHeader: { authToken: string }, tokenRequ
     } else {
       logA.info('Anonymous Connection Allowed');
     }
-
      logA.info('Anonymous Connection Attempt?');
   }
 }
@@ -94,6 +74,7 @@ export const operationAuthorized = async (requestBody: any): Promise<boolean> =>
     // logA.info(`Operation ${JSON.stringify(sel[0].name.value, null, ' ')}`);
     // if on Whitelist no auth required
     authRequired = !WHITELIST.includes(sel[0].name.value);
+    console.log('authRequired in authorization: ' + authRequired);
      logA.info(`Auth Required: ${authRequired}`);
   } else {
      logA.warn(`Operation Length: ${def.length} - ${sel.length}`);
