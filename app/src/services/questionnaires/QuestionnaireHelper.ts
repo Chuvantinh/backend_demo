@@ -1,6 +1,6 @@
 import { IpaqAnswersCreateWithoutQuestInput } from '../../generated/prisma-client';
 import { log } from '../../logger';
-import { ApolloError, ValidationError } from 'apollo-server';
+// import { ApolloError, ValidationError } from 'apollo-server';
 
 /**
  * Interface for all questionnaires
@@ -38,7 +38,7 @@ export class QuestionnaireHelper {
     const MINUTES_IN_HOUR: number = 60;
 
     if (answers.length !== QuestionnaireHelper.NUM_IPAQ_ANSWERS) {
-      throw new ValidationError('UNEXPECTED IPAQ Length');
+     // throw new ValidationError('UNEXPECTED IPAQ Length');
     }
 
     // log.info('IPAQ answers ' + JSON.stringify(answers, null, ' '));

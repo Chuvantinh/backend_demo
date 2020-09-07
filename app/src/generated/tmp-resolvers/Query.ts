@@ -8,6 +8,33 @@ export const Query: QueryResolvers.Type = {
   getUser: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },
+  groupColors: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  groups: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  group: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  challenges: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  challenge: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  categories: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  contributions: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  votings: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  awards: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
   getUserRole: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },

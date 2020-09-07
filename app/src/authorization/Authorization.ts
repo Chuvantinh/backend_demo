@@ -1,5 +1,5 @@
 // import * as jwt from 'jsonwebtoken';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import { gql } from 'apollo-server';
 import { log, logA } from '../logger';
 import { AuthenticationError } from 'apollo-server';
@@ -17,15 +17,21 @@ const assertAlive = (decoded: any) => {
   }
 }
 
+var jwt= require('jsonwebtoken');
+
 export const verifyAuthKey = async (authHeader: { authToken: string }, tokenRequired) => {
    logA.info(`Token exists: ${(authHeader.authToken)}`);
    logA.info(`Token required: ${(tokenRequired)}`);
-  if (tokenRequired) {
-    try {
-      const token = authHeader.authToken.replace('Bearer ', '');
-      const decoded = jwt.verify(token, APP_PRIVATE_KEY, (err, user) => {
-        if(err) throw new AuthenticationError('Token expired' + err);
-      });
+
+  if (authHeader.authToken && tokenRequired) {
+      try {
+          const token = authHeader.authToken.replace('Bearer ', '');
+          var decoded = jwt.verify(token, APP_PRIVATE_KEY);
+          console.log(decoded.userId) // bar
+        // the  below code is wrong, jwt can not import and i have to
+      // const decoded = jwt.verify(token, APP_PRIVATE_KEY, (err, user) => {
+      //   if(err) throw new AuthenticationError('Token expired' + err);
+      // });
         logA.info(`decoded key: ${JSON.stringify(decoded)}`);
       try {
         assertAlive(token)
@@ -57,47 +63,54 @@ const WHITELIST = [
 // Parses request body to find operation definition name see: 
 // https://stackoverflow.com/questions/57049366/get-query-mutation-operation-name and
 // https://stackoverflow.com/questions/49047259/how-to-parse-graphql-request-string-into-an-object
-export const operationAuthorized = async (requestBody: any): Promise<boolean> => {
+export const    operationAuthorized = async (requestBody: any): Promise<boolean> => {
   // check if operation is excepted from auth
   let authRequired = true;
-
-  const obj = gql`${requestBody}`;
-  const def = (obj.definitions as any[]);
-  const sel = (def as any[]).length > 0 ? (def as any[])[0].selectionSet.selections as any[] : undefined;
-  // used to check if is introspection
-  let defName: string;
-  defName = (def.length > 0) ? def[0].name.value : undefined
-
-  // logA.info(`Operation ${JSON.stringify(requestBody, null, ' ')}`);
-  // logA.info(`Operation Def ${JSON.stringify(defName, null, ' ')}`);
-  if (def.length === 1 && sel && sel.length === 1) {
-    // logA.info(`Operation ${JSON.stringify(sel[0].name.value, null, ' ')}`);
-    // if on Whitelist no auth required
-    authRequired = !WHITELIST.includes(sel[0].name.value);
-    console.log('authRequired in authorization: ' + authRequired);
-     logA.info(`Auth Required: ${authRequired}`);
-  } else {
-     logA.warn(`Operation Length: ${def.length} - ${sel.length}`);
-  }
-
-  // special case for Introspection Queries - allow them without token in Debug mode
-  if (defName && defName === "IntrospectionQuery" && ALLOW_INTROSPECTION) {
-      logA.info(`Definition ${JSON.stringify(defName, null, ' ')}`);
-    authRequired = false;
-  }
+  // console.log('requestBody.operationName is ' + requestBody.operationName)
+  // console.log(requestBody.operationName === "IntrospectionQuery")
+    if(requestBody.operationName === "IntrospectionQuery"){
+        // special case for Introspection Queries - allow them without token in Debug mode
+        if (ALLOW_INTROSPECTION) {
+            // logA.info(`Definition ${JSON.stringify(defName, null, ' ')}`);
+            authRequired = false;
+        }
+    }else{
+        requestBody = requestBody.query
+        const obj = gql`${requestBody}`;
+        const def = (obj.definitions as any[]);
+        const sel = (def as any[]).length > 0 ? (def as any[])[0].selectionSet.selections as any[] : undefined;
+        // used to check if is introspection
+        let defName: string;
+        //defName = (def.length > 0) ? def[0].name.value : undefined
+        // logA.info(`Operation ${JSON.stringify(requestBody, null, ' ')}`);
+        // logA.info(`Operation Def ${JSON.stringify(defName, null, ' ')}`);
+        if (def.length === 1 && sel && sel.length === 1) {
+            // logA.info(`Operation ${JSON.stringify(sel[0].name.value, null, ' ')}`);
+            // if on Whitelist no auth required
+            authRequired = !WHITELIST.includes(sel[0].name.value);
+            logA.info(`Auth Required: ${authRequired}`);
+        } else {
+            logA.warn(`Operation Length: ${def.length} - ${sel.length}`);
+        }
+    }
   return authRequired;
 }
 
 export const getUserRole = async (uid: string, prisma: Prisma): Promise<UserRole> => {
-  if (!uid) {
+    logA.info(`Definition ${JSON.stringify(uid, null, ' ')}`);
+  if (typeof uid == "undefined") {
     // for introspection
        return undefined;
   }
+
   // update user as seen now -> TODO: move somewhere else
   // await prisma.updateUser({
   //   where: { id: uid },
   //   data: { lastActive: moment().toDate() }
   // });
     // console.log(prisma.user({ id: uid }).role());
-  return prisma.user({ id: uid }).role();
+    // if(uid == undefined){
+    //     uid = "ckcys3hcg001v0719yxusdh52";
+    // }
+   return prisma.user({ id: uid }).role();
 }

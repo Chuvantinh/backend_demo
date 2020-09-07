@@ -23,6 +23,13 @@ import { Phq9 } from "./Phq9";
 import { Ipaq } from "./Ipaq";
 import { IpaqAnswers } from "./IpaqAnswers";
 import { FavoriteActivity } from "./FavoriteActivity";
+import { GroupColor } from "./GroupColor";
+import { Group } from "./Group";
+import { Challenge } from "./Challenge";
+import { Category } from "./Category";
+import { Contribution } from "./Contribution";
+import { Voting } from "./Voting";
+import { Award } from "./Award";
 import { UserActivity } from "./UserActivity";
 import { AdminUserTable } from "./AdminUserTable";
 import { BuddyMatch } from "./BuddyMatch";
@@ -52,6 +59,13 @@ export const resolvers: Resolvers = {
   Ipaq,
   IpaqAnswers,
   FavoriteActivity,
+  GroupColor,
+  Group,
+  Challenge,
+  Category,
+  Contribution,
+  Voting,
+  Award,
   UserActivity,
   AdminUserTable,
   BuddyMatch,

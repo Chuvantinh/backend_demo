@@ -6,6 +6,20 @@ type Query {
   ### USER
   """ Gibt alle Informationen über einen Nutzer zurück (Token erforderlich) """
   getUser: User!
+  ## query of van tinh
+  groupColors(where: GroupColorWhereInput): [GroupColor]
+  groups(where: GroupWhereInput): [Group]!
+  group(where: GroupWhereInput): Group!
+
+  challenges(where: ChallengeWhereInput): [Challenge]!
+  challenge(where: ChallengeWhereInput): Challenge!
+
+  categories(where: CategoryWhereInput): [Category]!
+
+  contributions(where: ContributionWhereInput): [Contribution]!
+  votings(where: VotingWhereInput, orderBy: VotingOrderByInput): [Voting!]
+  awards(where: AwardWhereInput): [Award]!
+
   """checkget the users Role"""
   getUserRole: UserRole!
   """ retrieves the current Users Settings """
@@ -83,9 +97,54 @@ type Query {
 
   getUsersLastPhqQuest(userID: ID): Phq9!
   getUserLastIpaqQuest(userID: ID): Ipaq!
+
+  ### VanTinh For table Challenge
 }
 
 type Mutation {
+  ### New Challenge
+  createChallenge(
+    title: String!,
+    description: String!,
+    image: String!,
+    premium: String,
+    timeEnd: DateTime,
+    emailSend: String,
+    status: StatusChallegen,
+    initiator: String,
+    jury: [UserWhereUniqueInput!],
+    category: [CategoryWhereUniqueInput!],
+    group: [GroupWhereUniqueInput!],
+    createdBy: UserWhereUniqueInput
+  ): Challenge!
+
+  ### new contribution for funciton teilnehmen
+  createContribution(
+    id: ID
+    title: String!,
+    description: String,
+    image: String,
+    createdBy: UserWhereUniqueInput
+  ): Contribution!
+
+  ### new contribution for funciton my voting
+  createVoting(
+    title: String!,
+    description: String,
+    votedPoint: Int,
+    challengeID: ChallengeWhereUniqueInput,
+    contributionID: ID!,
+    createdBy: UserWhereUniqueInput
+  ): Voting!
+
+  createAward(
+    challengeID: ChallengeWhereInput,
+    contributionID: ID!,
+    votingID: ID!,
+    createdBy: UserWhereUniqueInput,
+    status: AwardVT,
+    winner: UserWhereUniqueInput
+  ): Award!
 
   ### TRACKING
   createSensorData(type: String!, x: Float, y: Float, z: Float): SensorData!

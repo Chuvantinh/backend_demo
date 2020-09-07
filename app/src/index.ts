@@ -11,55 +11,14 @@ import { Context } from './types';
 import { getGlobalSettings, getGlobalSettingsId } from './global_settings/global.settings';
 import { taskScheduler } from './tasks/tasks';
 
-import {
-    makeExecutableSchema,
-    addMockFunctionsToSchema,
-    mergeSchemas,
-}from 'graphql-tools';
-
-const mocks = {
-    DateTime: () => {
-        return new Date();
-    },
-};
-
-
-// mock 2 schema together one
-// https://www.apollographql.com/docs/apollo-server/features/schema-stitching/
-
-const shema1 = makeExecutableSchema({
-    typeDefs : gql(importSchema('./src/schema/schema.graphql'))
-})
-addMockFunctionsToSchema({ schema: shema1 });
-
-// https://www.graphql-tools.com/docs/generate-schema/#example
-const shema2 = makeExecutableSchema({
-    typeDefs : gql(importSchema('./src/generated/schema/prisma.graphql'))
-})
-
-addMockFunctionsToSchema({ schema: shema2 });
-
-const mergedSchema = mergeSchemas({
-    schemas: [
-        shema1,
-        shema2
-    ],
-    resolvers: importResolvers as any
-});
-
-// let CONFIG_DEPLOYED: boolean = false;
-
 export async function main() {
 
   const tasker = taskScheduler;
   await tasker.restoreTasks(prisma);
   // see https://github.com/apollographql/apollo-server/issues/2315 for sample
-
       let server: ApolloServer = new ApolloServer({
-          schema: mergedSchema,
-        //typeDefs: gql(importSchema('./src/schema/schema.graphql')),
-           mocks: mocks,
-            mockEntireSchema: false,
+          typeDefs: gql(importSchema('./src/schema/schema.graphql')),
+          resolvers: importResolvers as any,
     context: async ({ req, connection }: any): Promise<Context> => {
         let header = { authToken: '' };
         if (connection) {
@@ -69,19 +28,21 @@ export async function main() {
         }
         // check if operation is excepted from auth
         // let authRequired = true;
-        let authRequired = false;
+         let authRequired = true;
         if (req && req.body && req.body.query) {
-            // authRequired = await operationAuthorized(req.body.query);
+              authRequired = await operationAuthorized(req.body);
         }
-        console.log('autheRequired is ' + authRequired);
 
-        const uid = await verifyAuthKey(header, authRequired);
-        return {
-            db: prisma,
-            userId: uid,
-            role: await getUserRole(uid, prisma),
-            settingsId: await getGlobalSettingsId(prisma),
-        };
+        //let authRequired = false;
+        //console.log('authRequired '+authRequired);
+
+            const uid = await verifyAuthKey(header, authRequired);
+            return {
+                db: prisma,
+                userId: uid,
+                role: await getUserRole(uid, prisma),
+                settingsId: await getGlobalSettingsId(prisma),
+            };
 
     },
     subscriptions: {

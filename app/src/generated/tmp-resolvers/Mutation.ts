@@ -5,6 +5,18 @@ import { MutationResolvers } from "../graphqlgen";
 
 export const Mutation: MutationResolvers.Type = {
   ...MutationResolvers.defaultResolvers,
+  createChallenge: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  createContribution: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  createVoting: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  createAward: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
   createSensorData: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },

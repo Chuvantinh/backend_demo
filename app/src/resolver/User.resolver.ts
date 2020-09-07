@@ -15,7 +15,7 @@ import { notification } from '../services/notification/NotificationService';
 
 export const UserQueryResolver: Pick<
   QueryResolvers.Type
-  , 'getUser'
+  ,'getUser'
   | 'getUserById'
   | 'getUserByName'
   | 'getUserRole'
@@ -73,7 +73,7 @@ export const UserQueryResolver: Pick<
   },
 
   getAllProfileActivities: async (root, args, ctx: Context) => {
-    return ctx.db.profileActivities({ where: {} });
+      return ctx.db.profileActivities({ where: {} });
   },
 
   users: async (root, args, ctx: Context) => {
@@ -198,8 +198,7 @@ export const UserMutationResolver: Pick<
 
   login: async (root, { username, password }, ctx: Context) => {
     // log.info('Login username is :  ' + JSON.stringify(username));
-     //  log.info(`login2`);
-      console.log(ctx);
+      // log.info(`login resolver vao day lan 2`);
      const user = await ctx.db.user({ username });
      
     if (!user) {
@@ -224,7 +223,22 @@ export const UserMutationResolver: Pick<
         expiresIn: TOKEN_EXPIRY_TIME
       })
     }
+
     // TODO: save token to db to validate expiry
+
+      // return token of prisma in order to get data from prisma
+      // const authPayload: AuthPayload = {
+      //     user,
+      //     token: jwt.sign(
+      //         {
+      //                 service: "default@default",
+      //                 roles: user.role
+      //         },
+      //         APP_PRIVATE_KEY, {
+      //             // algorithm: 'RS256', // process.env.TOKEN_ALGORITHM,
+      //             expiresIn: TOKEN_EXPIRY_TIME
+      //         })
+      // }
 
     return authPayload;
   },
