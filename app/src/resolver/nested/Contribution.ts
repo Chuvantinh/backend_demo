@@ -10,7 +10,7 @@ export const Contribution: ContributionResolvers.Type = {
         }).challengeID();
     },
     createdBy: async (parent, args, ctx: Context) => {
-        return ctx.db.challenge({
+        return ctx.db.contribution({
             id: parent.id
         }).createdBy();
     }
