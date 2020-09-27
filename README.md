@@ -256,6 +256,47 @@ Den erzeugten Token aus der rückgabe der mutation im Playground als http header
 }
 ```
 
+#### Category und Group, GroupColors zu erschaffen
+Laufen diese folgende Command, um die Daten für Category , Group , Groups Color zu erstellen
+Sie können mehrer Category, und Group, GroupColor schaffen,wie Sie wünschen.
+```graphql
+  mutation {
+    createGroup(data:{
+      title: "Für Studenten",
+      description: "Beschreibung von Studenten",
+      createdBy:{
+        connect:{
+          id: "ckcys3hcg001v0719yxusdh52"
+        }
+      }
+    }){
+     id,
+      title
+    }
+  }
+  
+    createGroupColor(
+        data:{
+          color: "yellow",
+          group:{
+            connect:{
+              id: "ckd1gw3xy008v0731p4x1o067"
+            }
+          }
+        }
+    ){
+        id,
+        color
+    }
+      createCategory(
+        data:{
+            title: "Geschäftmodel"
+            description: "Beschreibung für diese Category"
+        }
+      ){
+        id
+      }
+```
 
 ### Aktivitäten erstellen
 Muss einmalig nach aufsetzten der Datenbank geschehen!

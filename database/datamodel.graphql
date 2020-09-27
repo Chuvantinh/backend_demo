@@ -312,6 +312,7 @@ type Challenge {
 }
 
 ### created 3 table relationships for Group with Challenge  and  Categories with Challenge
+## not used , but not remove because prisma deploy was running very slow on weak server.  
 type ChallengeGroup {
   id: ID! @id
   challegeId: Challenge
