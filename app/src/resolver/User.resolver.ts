@@ -198,7 +198,6 @@ export const UserMutationResolver: Pick<
 
   login: async (root, { username, password }, ctx: Context) => {
     // log.info('Login username is :  ' + JSON.stringify(username));
-      // log.info(`login resolver vao day lan 2`);
      const user = await ctx.db.user({ username });
      
     if (!user) {

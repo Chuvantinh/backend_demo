@@ -1,3 +1,5 @@
+// nested relation: https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/relation-queries
+
 import {ApolloServer, gql, ValidationError} from 'apollo-server';
 import {importSchema} from 'graphql-import';
 import {getOperationAST} from 'graphql';
