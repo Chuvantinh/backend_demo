@@ -1,4 +1,3 @@
-
 import {GroupColorResolvers} from '../../generated/graphqlgen';
 import { Context } from '../../types';
 
