@@ -87,9 +87,16 @@ class NotificationService {
   };
 
   public constructor() {
+    if( this.VAPID_KEYS.publicKey == undefined){
+        this.VAPID_KEYS.publicKey = "BCoNazO7YV-LvkOQGR5NygdsqyOwUrGAZ8VZWR4WioAlRh5A0vP-TRD70JITRrVuS8ChmCGWX9XTzva-EOk7zp4";
+    }
+
+    if( this.VAPID_KEYS.privateKey == undefined){
+        this.VAPID_KEYS.privateKey = "53jrG0tlJP2iuv9o_LyIvmr1MHGbT7D8mLOyH-vvpXY";
+    }
     webpush.setVapidDetails(
       'mailto:mantheys@charite.de',
-      this.VAPID_KEYS.publicKey,
+      this.VAPID_KEYS.publicKey ,
       this.VAPID_KEYS.privateKey
     );
   }
