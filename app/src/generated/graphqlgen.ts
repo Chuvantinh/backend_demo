@@ -28,7 +28,8 @@ import {
   Contribution,
   Voting,
   Award,
-  BuddyRequest
+  BuddyRequest,
+  Question
 } from "./prisma-client";
 import {
   UserActivity,
@@ -730,7 +731,6 @@ export namespace QueryResolvers {
     status_not?: AwardVT | null;
     status_in?: AwardVT[] | null;
     status_not_in?: AwardVT[] | null;
-    winner?: UserWhereInput | null;
     createdAt?: string | null;
     createdAt_not?: string | null;
     createdAt_in?: string[] | null;
@@ -18686,7 +18686,7 @@ export namespace AwardResolvers {
         ) => AwardVT | null | Promise<AwardVT | null>;
       };
 
-  export type WinnerResolver =
+  export type WinneruserResolver =
     | ((
         parent: Award,
         args: {},
@@ -18838,23 +18838,6 @@ export namespace AwardResolvers {
             ctx: Context,
             info: GraphQLResolveInfo
           ) => AwardVT | null | Promise<AwardVT | null>;
-        };
-
-    winner:
-      | ((
-          parent: Award,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => User | null | Promise<User | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Award,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => User | null | Promise<User | null>;
         };
 
     createdAt:
@@ -23088,6 +23071,13 @@ export namespace MutationResolvers {
     trackingRequested?: boolean | null;
   }
 
+  export interface ArgsCreateQuestion {
+    title?: string | null;
+    description?: string | null;
+    json_infor?: string | null;
+    createdBy?: UserWhereUniqueInput | null;
+  }
+
   export interface ArgsCreateChallenge {
     title: string;
     description: string;
@@ -23287,6 +23277,23 @@ export namespace MutationResolvers {
   export interface ArgsDeleteChat {
     id: string;
   }
+
+  export type CreateQuestionResolver =
+    | ((
+        parent: undefined,
+        args: ArgsCreateQuestion,
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => Question | Promise<Question>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: undefined,
+          args: ArgsCreateQuestion,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Question | Promise<Question>;
+      };
 
   export type CreateChallengeResolver =
     | ((
@@ -24020,6 +24027,23 @@ export namespace MutationResolvers {
       };
 
   export interface Type {
+    createQuestion:
+      | ((
+          parent: undefined,
+          args: ArgsCreateQuestion,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Question | Promise<Question>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: undefined,
+            args: ArgsCreateQuestion,
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => Question | Promise<Question>;
+        };
+
     createChallenge:
       | ((
           parent: undefined,
@@ -24753,6 +24777,226 @@ export namespace MutationResolvers {
   }
 }
 
+export namespace QuestionResolvers {
+  export const defaultResolvers = {
+    id: (parent: Question) => parent.id,
+    title: (parent: Question) =>
+      parent.title === undefined ? null : parent.title,
+    description: (parent: Question) =>
+      parent.description === undefined ? null : parent.description,
+    json_infor: (parent: Question) =>
+      parent.json_infor === undefined ? null : parent.json_infor,
+    createdAt: (parent: Question) =>
+      parent.createdAt === undefined ? null : parent.createdAt
+  };
+
+  export type IdResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | Promise<string>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>;
+      };
+
+  export type TitleResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type DescriptionResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type Json_inforResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type CreatedByResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => User | null | Promise<User | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>;
+      };
+
+  export type CreatedAtResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export interface Type {
+    id:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | Promise<string>;
+        };
+
+    title:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    description:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    json_infor:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    createdBy:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => User | null | Promise<User | null>;
+        };
+
+    createdAt:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+  }
+}
+
 export namespace AuthPayloadResolvers {
   export const defaultResolvers = {
     token: (parent: AuthPayload) => parent.token,
@@ -25079,6 +25323,7 @@ export interface Resolvers {
   BuddyMatch: BuddyMatchResolvers.Type;
   BuddyRequest: BuddyRequestResolvers.Type;
   Mutation: MutationResolvers.Type;
+  Question: QuestionResolvers.Type;
   AuthPayload: AuthPayloadResolvers.Type;
   Subscription: SubscriptionResolvers.Type;
 }

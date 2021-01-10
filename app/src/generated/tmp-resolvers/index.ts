@@ -35,6 +35,7 @@ import { AdminUserTable } from "./AdminUserTable";
 import { BuddyMatch } from "./BuddyMatch";
 import { BuddyRequest } from "./BuddyRequest";
 import { Mutation } from "./Mutation";
+import { Question } from "./Question";
 import { AuthPayload } from "./AuthPayload";
 import { Subscription } from "./Subscription";
 
@@ -71,6 +72,7 @@ export const resolvers: Resolvers = {
   BuddyMatch,
   BuddyRequest,
   Mutation,
+  Question,
   AuthPayload,
   Subscription
 };

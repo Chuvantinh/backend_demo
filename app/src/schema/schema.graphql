@@ -102,6 +102,14 @@ type Query {
 }
 
 type Mutation {
+  ## add new question
+  createQuestion(
+    title: String
+    description: String
+    json_infor: String
+    createdBy: UserWhereUniqueInput
+  ): Question!
+
   ### New Challenge
   createChallenge(
     title: String!,

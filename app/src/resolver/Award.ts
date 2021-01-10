@@ -37,9 +37,9 @@ export const AwardMutationResolver: Pick<MutationResolvers.Type
                 connect: createdBy
             },
             status: status,
-            winner:{
-                connect: winner
-            }
+            // winner:{
+            //     connect: winner
+            // }
         });
     }
 }

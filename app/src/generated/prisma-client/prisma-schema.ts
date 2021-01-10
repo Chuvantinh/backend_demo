@@ -435,6 +435,10 @@ type AggregateActivity {
   count: Int!
 }
 
+type AggregateAnswer {
+  count: Int!
+}
+
 type AggregateAward {
   count: Int!
 }
@@ -539,6 +543,10 @@ type AggregateProfileActivity {
   count: Int!
 }
 
+type AggregateQuestion {
+  count: Int!
+}
+
 type AggregateQuestionnaires {
   count: Int!
 }
@@ -575,6 +583,99 @@ type AggregateWebPushSettings {
   count: Int!
 }
 
+type Answer {
+  id: ID!
+  questionID: Question
+  createdBy: User
+  createdAt: DateTime
+}
+
+type AnswerConnection {
+  pageInfo: PageInfo!
+  edges: [AnswerEdge]!
+  aggregate: AggregateAnswer!
+}
+
+input AnswerCreateInput {
+  id: ID
+  questionID: QuestionCreateOneInput
+  createdBy: UserCreateOneInput
+}
+
+type AnswerEdge {
+  node: Answer!
+  cursor: String!
+}
+
+enum AnswerOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AnswerPreviousValues {
+  id: ID!
+  createdAt: DateTime
+}
+
+type AnswerSubscriptionPayload {
+  mutation: MutationType!
+  node: Answer
+  updatedFields: [String!]
+  previousValues: AnswerPreviousValues
+}
+
+input AnswerSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AnswerWhereInput
+  AND: [AnswerSubscriptionWhereInput!]
+  OR: [AnswerSubscriptionWhereInput!]
+  NOT: [AnswerSubscriptionWhereInput!]
+}
+
+input AnswerUpdateInput {
+  questionID: QuestionUpdateOneInput
+  createdBy: UserUpdateOneInput
+}
+
+input AnswerWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  questionID: QuestionWhereInput
+  createdBy: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [AnswerWhereInput!]
+  OR: [AnswerWhereInput!]
+  NOT: [AnswerWhereInput!]
+}
+
+input AnswerWhereUniqueInput {
+  id: ID
+}
+
 type Award {
   id: ID!
   challengeID: Challenge
@@ -582,7 +683,7 @@ type Award {
   votingID: Voting
   createdBy: User
   status: AwardVT
-  winner: User
+  winneruser: User
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -600,7 +701,7 @@ input AwardCreateInput {
   votingID: VotingCreateOneInput
   createdBy: UserCreateOneInput
   status: AwardVT
-  winner: UserCreateOneInput
+  winneruser: UserCreateOneInput
 }
 
 type AwardEdge {
@@ -650,7 +751,7 @@ input AwardUpdateInput {
   votingID: VotingUpdateOneInput
   createdBy: UserUpdateOneInput
   status: AwardVT
-  winner: UserUpdateOneInput
+  winneruser: UserUpdateOneInput
 }
 
 input AwardUpdateManyMutationInput {
@@ -686,7 +787,7 @@ input AwardWhereInput {
   status_not: AwardVT
   status_in: [AwardVT!]
   status_not_in: [AwardVT!]
-  winner: UserWhereInput
+  winneruser: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -4999,6 +5100,11 @@ type Mutation {
   upsertActivity(where: ActivityWhereUniqueInput!, create: ActivityCreateInput!, update: ActivityUpdateInput!): Activity!
   deleteActivity(where: ActivityWhereUniqueInput!): Activity
   deleteManyActivities(where: ActivityWhereInput): BatchPayload!
+  createAnswer(data: AnswerCreateInput!): Answer!
+  updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
+  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
+  deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   createAward(data: AwardCreateInput!): Award!
   updateAward(data: AwardUpdateInput!, where: AwardWhereUniqueInput!): Award
   updateManyAwards(data: AwardUpdateManyMutationInput!, where: AwardWhereInput): BatchPayload!
@@ -5150,6 +5256,12 @@ type Mutation {
   upsertProfileActivity(where: ProfileActivityWhereUniqueInput!, create: ProfileActivityCreateInput!, update: ProfileActivityUpdateInput!): ProfileActivity!
   deleteProfileActivity(where: ProfileActivityWhereUniqueInput!): ProfileActivity
   deleteManyProfileActivities(where: ProfileActivityWhereInput): BatchPayload!
+  createQuestion(data: QuestionCreateInput!): Question!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createQuestionnaires(data: QuestionnairesCreateInput!): Questionnaires!
   updateQuestionnaires(data: QuestionnairesUpdateInput!, where: QuestionnairesWhereUniqueInput!): Questionnaires
   upsertQuestionnaires(where: QuestionnairesWhereUniqueInput!, create: QuestionnairesCreateInput!, update: QuestionnairesUpdateInput!): Questionnaires!
@@ -6397,6 +6509,9 @@ type Query {
   activity(where: ActivityWhereUniqueInput!): Activity
   activities(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity]!
   activitiesConnection(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActivityConnection!
+  answer(where: AnswerWhereUniqueInput!): Answer
+  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
+  answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   award(where: AwardWhereUniqueInput!): Award
   awards(where: AwardWhereInput, orderBy: AwardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Award]!
   awardsConnection(where: AwardWhereInput, orderBy: AwardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AwardConnection!
@@ -6475,6 +6590,9 @@ type Query {
   profileActivity(where: ProfileActivityWhereUniqueInput!): ProfileActivity
   profileActivities(where: ProfileActivityWhereInput, orderBy: ProfileActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProfileActivity]!
   profileActivitiesConnection(where: ProfileActivityWhereInput, orderBy: ProfileActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileActivityConnection!
+  question(where: QuestionWhereUniqueInput!): Question
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   questionnaires(where: QuestionnairesWhereUniqueInput!): Questionnaires
   questionnaireses(where: QuestionnairesWhereInput, orderBy: QuestionnairesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Questionnaires]!
   questionnairesesConnection(where: QuestionnairesWhereInput, orderBy: QuestionnairesOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionnairesConnection!
@@ -6503,6 +6621,39 @@ type Query {
   webPushSettingses(where: WebPushSettingsWhereInput, orderBy: WebPushSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WebPushSettings]!
   webPushSettingsesConnection(where: WebPushSettingsWhereInput, orderBy: WebPushSettingsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WebPushSettingsConnection!
   node(id: ID!): Node
+}
+
+type Question {
+  id: ID!
+  title: String
+  description: String
+  json_infor: String
+  createdBy: User
+  createdAt: DateTime
+}
+
+type QuestionConnection {
+  pageInfo: PageInfo!
+  edges: [QuestionEdge]!
+  aggregate: AggregateQuestion!
+}
+
+input QuestionCreateInput {
+  id: ID
+  title: String
+  description: String
+  json_infor: String
+  createdBy: UserCreateOneInput
+}
+
+input QuestionCreateOneInput {
+  create: QuestionCreateInput
+  connect: QuestionWhereUniqueInput
+}
+
+type QuestionEdge {
+  node: Question!
+  cursor: String!
 }
 
 type Questionnaires {
@@ -6677,6 +6828,154 @@ input QuestionnairesWhereInput {
 }
 
 input QuestionnairesWhereUniqueInput {
+  id: ID
+}
+
+enum QuestionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  json_infor_ASC
+  json_infor_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type QuestionPreviousValues {
+  id: ID!
+  title: String
+  description: String
+  json_infor: String
+  createdAt: DateTime
+}
+
+type QuestionSubscriptionPayload {
+  mutation: MutationType!
+  node: Question
+  updatedFields: [String!]
+  previousValues: QuestionPreviousValues
+}
+
+input QuestionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: QuestionWhereInput
+  AND: [QuestionSubscriptionWhereInput!]
+  OR: [QuestionSubscriptionWhereInput!]
+  NOT: [QuestionSubscriptionWhereInput!]
+}
+
+input QuestionUpdateDataInput {
+  title: String
+  description: String
+  json_infor: String
+  createdBy: UserUpdateOneInput
+}
+
+input QuestionUpdateInput {
+  title: String
+  description: String
+  json_infor: String
+  createdBy: UserUpdateOneInput
+}
+
+input QuestionUpdateManyMutationInput {
+  title: String
+  description: String
+  json_infor: String
+}
+
+input QuestionUpdateOneInput {
+  create: QuestionCreateInput
+  update: QuestionUpdateDataInput
+  upsert: QuestionUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: QuestionWhereUniqueInput
+}
+
+input QuestionUpsertNestedInput {
+  update: QuestionUpdateDataInput!
+  create: QuestionCreateInput!
+}
+
+input QuestionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  json_infor: String
+  json_infor_not: String
+  json_infor_in: [String!]
+  json_infor_not_in: [String!]
+  json_infor_lt: String
+  json_infor_lte: String
+  json_infor_gt: String
+  json_infor_gte: String
+  json_infor_contains: String
+  json_infor_not_contains: String
+  json_infor_starts_with: String
+  json_infor_not_starts_with: String
+  json_infor_ends_with: String
+  json_infor_not_ends_with: String
+  createdBy: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
+}
+
+input QuestionWhereUniqueInput {
   id: ID
 }
 
@@ -7227,6 +7526,7 @@ enum StatusChallegen {
 
 type Subscription {
   activity(where: ActivitySubscriptionWhereInput): ActivitySubscriptionPayload
+  answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   award(where: AwardSubscriptionWhereInput): AwardSubscriptionPayload
   bot(where: BotSubscriptionWhereInput): BotSubscriptionPayload
   botSettings(where: BotSettingsSubscriptionWhereInput): BotSettingsSubscriptionPayload
@@ -7253,6 +7553,7 @@ type Subscription {
   patientProfileInfo(where: PatientProfileInfoSubscriptionWhereInput): PatientProfileInfoSubscriptionPayload
   phq9(where: Phq9SubscriptionWhereInput): Phq9SubscriptionPayload
   profileActivity(where: ProfileActivitySubscriptionWhereInput): ProfileActivitySubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   questionnaires(where: QuestionnairesSubscriptionWhereInput): QuestionnairesSubscriptionPayload
   scheduledTask(where: ScheduledTaskSubscriptionWhereInput): ScheduledTaskSubscriptionPayload
   sensorData(where: SensorDataSubscriptionWhereInput): SensorDataSubscriptionPayload

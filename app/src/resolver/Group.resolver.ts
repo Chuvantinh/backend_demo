@@ -21,5 +21,4 @@ export const GroupQueryResolver: Pick<
     group: async (root, args, ctx: Context) => {
       return await ctx.db.group(args.where);
     }
-
 }

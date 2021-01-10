@@ -216,7 +216,10 @@ export const UserMutationResolver: Pick<
     const authPayload: AuthPayload = {
       user,
       token: jwt.sign(
-          { userId: user.id },
+          {
+              userId: user.id,
+              userRole: user.role
+          },
         APP_PRIVATE_KEY, {
         // algorithm: 'RS256', // process.env.TOKEN_ALGORITHM,
         expiresIn: TOKEN_EXPIRY_TIME

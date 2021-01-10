@@ -396,4 +396,20 @@ type Award{
 
 # mein Prämie, Trophäen  also how it works.
 
+# part 2 create a med tech service in order to adviso custommer or introduce them to other services
+type Question{
+  id: ID! @id
+  title: String
+  description: String
+  json_infor: String
+  createdBy: User @relation(name: "QuestionsUser")
+  createdAt: DateTime  @createdAt
+}
+type Answer{
+  id: ID! @id
+  questionID: Question
+  createdBy: User @relation(name: "AnswersUser")
+  createdAt: DateTime  @createdAt
+}
+
 ### end create table by vantinhchu ###
