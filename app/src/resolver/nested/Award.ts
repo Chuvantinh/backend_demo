@@ -29,9 +29,9 @@ export const Award: AwardResolvers.Type = {
     //         id: parent.id
     //     }).winneruser();
     // }
-    // winner: async (parent, args, ctx: Context) => {
-    //     return ctx.db.award({
-    //         id: parent.id
-    //     }).createdBy();
-    // },
+    winner: async (parent, args, ctx: Context) => {
+        return ctx.db.award({
+            id: parent.id
+        }).createdBy();
+    },
 };

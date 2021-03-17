@@ -1,21 +1,22 @@
 import * as moment from 'moment';
 import { QueryResolvers, MutationResolvers, SubscriptionResolvers } from '../generated/graphqlgen';
 import { Context, AuthPayload } from '../types';
-//export const QuestionQueryResolver:
-    //Pick<
-    // QueryResolvers.Type ,'question' | 'questions'
-    // > = {
-    // ...QueryResolvers.defaultResolvers,
-    //
+export const QuestionQueryResolver:
+    Pick<
+    QueryResolvers.Type ,'questions'
+    > = {
+    ...QueryResolvers.defaultResolvers,
+
     // question: async (root, args, ctx: Context) => {
     //     return await ctx.db.question(args.where);
     // },
-    // questions: async (root, args, ctx: Context) => {
-    //     return await ctx.db.questions({
-    //         where: args.where
-    //     });
-    // },
-//}
+    questions: async (root, args, ctx: Context) => {
+        return await ctx.db.questions({
+            where: args.where,
+            last: 1
+        });
+    },
+}
 
 export const QuestionMutationResolver: Pick<
     MutationResolvers.Type

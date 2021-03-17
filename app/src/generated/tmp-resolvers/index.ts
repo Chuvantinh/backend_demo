@@ -23,6 +23,8 @@ import { Phq9 } from "./Phq9";
 import { Ipaq } from "./Ipaq";
 import { IpaqAnswers } from "./IpaqAnswers";
 import { FavoriteActivity } from "./FavoriteActivity";
+import { Question } from "./Question";
+import { Answer } from "./Answer";
 import { GroupColor } from "./GroupColor";
 import { Group } from "./Group";
 import { Challenge } from "./Challenge";
@@ -35,7 +37,6 @@ import { AdminUserTable } from "./AdminUserTable";
 import { BuddyMatch } from "./BuddyMatch";
 import { BuddyRequest } from "./BuddyRequest";
 import { Mutation } from "./Mutation";
-import { Question } from "./Question";
 import { AuthPayload } from "./AuthPayload";
 import { Subscription } from "./Subscription";
 
@@ -60,6 +61,8 @@ export const resolvers: Resolvers = {
   Ipaq,
   IpaqAnswers,
   FavoriteActivity,
+  Question,
+  Answer,
   GroupColor,
   Group,
   Challenge,
@@ -72,7 +75,6 @@ export const resolvers: Resolvers = {
   BuddyMatch,
   BuddyRequest,
   Mutation,
-  Question,
   AuthPayload,
   Subscription
 };

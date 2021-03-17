@@ -389,7 +389,7 @@ type Award{
   votingID: Voting
   createdBy: User @relation(name: "AwardsUser")
   status: AwardVT
-  winner: User @relation(name: "AwardToUser")
+  winner: User @relation(name: "AwardwinssUser")
   createdAt: DateTime  @createdAt
   updatedAt: DateTime @updatedAt
 }
@@ -403,13 +403,16 @@ type Question{
   description: String
   json_infor: String
   createdBy: User @relation(name: "QuestionsUser")
-  createdAt: DateTime  @createdAt
+  createdAt: DateTime @createdAt
 }
+
 type Answer{
   id: ID! @id
   questionID: Question
+  json_infor: String
+  totalPoint: Int
+  createdAt: DateTime @createdAt
   createdBy: User @relation(name: "AnswersUser")
-  createdAt: DateTime  @createdAt
 }
 
 ### end create table by vantinhchu ###

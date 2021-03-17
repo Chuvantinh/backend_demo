@@ -18,4 +18,7 @@ export const Award: AwardResolvers.Type = {
   createdBy: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },
+  winner: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  }
 };

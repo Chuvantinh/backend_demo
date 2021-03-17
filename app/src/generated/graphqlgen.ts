@@ -21,6 +21,8 @@ import {
   Ipaq,
   IpaqAnswers,
   FavoriteActivity,
+  Question,
+  Answer,
   GroupColor,
   Group,
   Challenge,
@@ -28,8 +30,7 @@ import {
   Contribution,
   Voting,
   Award,
-  BuddyRequest,
-  Question
+  BuddyRequest
 } from "./prisma-client";
 import {
   UserActivity,
@@ -247,6 +248,127 @@ export type BuddyRequestState = "SEND" | "CONFIRMED" | "DENIED" | "REMOVED";
 export namespace QueryResolvers {
   export const defaultResolvers = {};
 
+  export interface QuestionWhereInput {
+    id?: string | null;
+    id_not?: string | null;
+    id_in?: string[] | null;
+    id_not_in?: string[] | null;
+    id_lt?: string | null;
+    id_lte?: string | null;
+    id_gt?: string | null;
+    id_gte?: string | null;
+    id_contains?: string | null;
+    id_not_contains?: string | null;
+    id_starts_with?: string | null;
+    id_not_starts_with?: string | null;
+    id_ends_with?: string | null;
+    id_not_ends_with?: string | null;
+    title?: string | null;
+    title_not?: string | null;
+    title_in?: string[] | null;
+    title_not_in?: string[] | null;
+    title_lt?: string | null;
+    title_lte?: string | null;
+    title_gt?: string | null;
+    title_gte?: string | null;
+    title_contains?: string | null;
+    title_not_contains?: string | null;
+    title_starts_with?: string | null;
+    title_not_starts_with?: string | null;
+    title_ends_with?: string | null;
+    title_not_ends_with?: string | null;
+    description?: string | null;
+    description_not?: string | null;
+    description_in?: string[] | null;
+    description_not_in?: string[] | null;
+    description_lt?: string | null;
+    description_lte?: string | null;
+    description_gt?: string | null;
+    description_gte?: string | null;
+    description_contains?: string | null;
+    description_not_contains?: string | null;
+    description_starts_with?: string | null;
+    description_not_starts_with?: string | null;
+    description_ends_with?: string | null;
+    description_not_ends_with?: string | null;
+    json_infor?: string | null;
+    json_infor_not?: string | null;
+    json_infor_in?: string[] | null;
+    json_infor_not_in?: string[] | null;
+    json_infor_lt?: string | null;
+    json_infor_lte?: string | null;
+    json_infor_gt?: string | null;
+    json_infor_gte?: string | null;
+    json_infor_contains?: string | null;
+    json_infor_not_contains?: string | null;
+    json_infor_starts_with?: string | null;
+    json_infor_not_starts_with?: string | null;
+    json_infor_ends_with?: string | null;
+    json_infor_not_ends_with?: string | null;
+    createdBy?: UserWhereInput | null;
+    createdAt?: string | null;
+    createdAt_not?: string | null;
+    createdAt_in?: string[] | null;
+    createdAt_not_in?: string[] | null;
+    createdAt_lt?: string | null;
+    createdAt_lte?: string | null;
+    createdAt_gt?: string | null;
+    createdAt_gte?: string | null;
+    AND?: QuestionWhereInput[] | null;
+    OR?: QuestionWhereInput[] | null;
+    NOT?: QuestionWhereInput[] | null;
+  }
+  export interface AnswerWhereInput {
+    id?: string | null;
+    id_not?: string | null;
+    id_in?: string[] | null;
+    id_not_in?: string[] | null;
+    id_lt?: string | null;
+    id_lte?: string | null;
+    id_gt?: string | null;
+    id_gte?: string | null;
+    id_contains?: string | null;
+    id_not_contains?: string | null;
+    id_starts_with?: string | null;
+    id_not_starts_with?: string | null;
+    id_ends_with?: string | null;
+    id_not_ends_with?: string | null;
+    questionID?: QuestionWhereInput | null;
+    json_infor?: string | null;
+    json_infor_not?: string | null;
+    json_infor_in?: string[] | null;
+    json_infor_not_in?: string[] | null;
+    json_infor_lt?: string | null;
+    json_infor_lte?: string | null;
+    json_infor_gt?: string | null;
+    json_infor_gte?: string | null;
+    json_infor_contains?: string | null;
+    json_infor_not_contains?: string | null;
+    json_infor_starts_with?: string | null;
+    json_infor_not_starts_with?: string | null;
+    json_infor_ends_with?: string | null;
+    json_infor_not_ends_with?: string | null;
+    totalPoint?: number | null;
+    totalPoint_not?: number | null;
+    totalPoint_in?: number[] | null;
+    totalPoint_not_in?: number[] | null;
+    totalPoint_lt?: number | null;
+    totalPoint_lte?: number | null;
+    totalPoint_gt?: number | null;
+    totalPoint_gte?: number | null;
+    createdAt?: string | null;
+    createdAt_not?: string | null;
+    createdAt_in?: string[] | null;
+    createdAt_not_in?: string[] | null;
+    createdAt_lt?: string | null;
+    createdAt_lte?: string | null;
+    createdAt_gt?: string | null;
+    createdAt_gte?: string | null;
+    createdBy?: UserWhereInput | null;
+    AND?: AnswerWhereInput[] | null;
+    OR?: AnswerWhereInput[] | null;
+    NOT?: AnswerWhereInput[] | null;
+  }
   export interface GroupColorWhereInput {
     id?: string | null;
     id_not?: string | null;
@@ -731,6 +853,7 @@ export namespace QueryResolvers {
     status_not?: AwardVT | null;
     status_in?: AwardVT[] | null;
     status_not_in?: AwardVT[] | null;
+    winner?: UserWhereInput | null;
     createdAt?: string | null;
     createdAt_not?: string | null;
     createdAt_in?: string[] | null;
@@ -1815,6 +1938,14 @@ export namespace QueryResolvers {
     NOT?: ChatMessageAttachmentWhereInput[] | null;
   }
 
+  export interface ArgsQuestions {
+    where?: QuestionWhereInput | null;
+  }
+
+  export interface ArgsGetanswer {
+    where?: AnswerWhereInput | null;
+  }
+
   export interface ArgsGroupColors {
     where?: GroupColorWhereInput | null;
   }
@@ -1943,6 +2074,40 @@ export namespace QueryResolvers {
           ctx: Context,
           info: GraphQLResolveInfo
         ) => User | Promise<User>;
+      };
+
+  export type QuestionsResolver =
+    | ((
+        parent: undefined,
+        args: ArgsQuestions,
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => Array<Question | null> | Promise<Array<Question | null>>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: undefined,
+          args: ArgsQuestions,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Array<Question | null> | Promise<Array<Question | null>>;
+      };
+
+  export type GetanswerResolver =
+    | ((
+        parent: undefined,
+        args: ArgsGetanswer,
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => Array<Answer | null> | Promise<Array<Answer | null>>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: undefined,
+          args: ArgsGetanswer,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Array<Answer | null> | Promise<Array<Answer | null>>;
       };
 
   export type GroupColorsResolver =
@@ -2764,6 +2929,40 @@ export namespace QueryResolvers {
             ctx: Context,
             info: GraphQLResolveInfo
           ) => User | Promise<User>;
+        };
+
+    questions:
+      | ((
+          parent: undefined,
+          args: ArgsQuestions,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Array<Question | null> | Promise<Array<Question | null>>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: undefined,
+            args: ArgsQuestions,
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => Array<Question | null> | Promise<Array<Question | null>>;
+        };
+
+    getanswer:
+      | ((
+          parent: undefined,
+          args: ArgsGetanswer,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Array<Answer | null> | Promise<Array<Answer | null>>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: undefined,
+            args: ArgsGetanswer,
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => Array<Answer | null> | Promise<Array<Answer | null>>;
         };
 
     groupColors:
@@ -12782,6 +12981,444 @@ export namespace FavoriteActivityResolvers {
   }
 }
 
+export namespace QuestionResolvers {
+  export const defaultResolvers = {
+    id: (parent: Question) => parent.id,
+    title: (parent: Question) =>
+      parent.title === undefined ? null : parent.title,
+    description: (parent: Question) =>
+      parent.description === undefined ? null : parent.description,
+    json_infor: (parent: Question) =>
+      parent.json_infor === undefined ? null : parent.json_infor,
+    createdAt: (parent: Question) =>
+      parent.createdAt === undefined ? null : parent.createdAt
+  };
+
+  export type IdResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | Promise<string>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>;
+      };
+
+  export type TitleResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type DescriptionResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type Json_inforResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type CreatedByResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => User | null | Promise<User | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>;
+      };
+
+  export type CreatedAtResolver =
+    | ((
+        parent: Question,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export interface Type {
+    id:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | Promise<string>;
+        };
+
+    title:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    description:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    json_infor:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    createdBy:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => User | null | Promise<User | null>;
+        };
+
+    createdAt:
+      | ((
+          parent: Question,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Question,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+  }
+}
+
+export namespace AnswerResolvers {
+  export const defaultResolvers = {
+    id: (parent: Answer) => parent.id,
+    json_infor: (parent: Answer) =>
+      parent.json_infor === undefined ? null : parent.json_infor,
+    totalPoint: (parent: Answer) =>
+      parent.totalPoint === undefined ? null : parent.totalPoint,
+    createdAt: (parent: Answer) =>
+      parent.createdAt === undefined ? null : parent.createdAt
+  };
+
+  export type IdResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | Promise<string>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>;
+      };
+
+  export type QuestionIDResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => Question | null | Promise<Question | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Question | null | Promise<Question | null>;
+      };
+
+  export type Json_inforResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type TotalPointResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => number | null | Promise<number | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => number | null | Promise<number | null>;
+      };
+
+  export type CreatedAtResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => string | null | Promise<string | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>;
+      };
+
+  export type CreatedByResolver =
+    | ((
+        parent: Answer,
+        args: {},
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => User | null | Promise<User | null>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>;
+      };
+
+  export interface Type {
+    id:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | Promise<string>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | Promise<string>;
+        };
+
+    questionID:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Question | null | Promise<Question | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => Question | null | Promise<Question | null>;
+        };
+
+    json_infor:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    totalPoint:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => number | null | Promise<number | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => number | null | Promise<number | null>;
+        };
+
+    createdAt:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => string | null | Promise<string | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => string | null | Promise<string | null>;
+        };
+
+    createdBy:
+      | ((
+          parent: Answer,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Answer,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => User | null | Promise<User | null>;
+        };
+  }
+}
+
 export namespace GroupColorResolvers {
   export const defaultResolvers = {
     id: (parent: GroupColor) => parent.id,
@@ -18686,7 +19323,7 @@ export namespace AwardResolvers {
         ) => AwardVT | null | Promise<AwardVT | null>;
       };
 
-  export type WinneruserResolver =
+  export type WinnerResolver =
     | ((
         parent: Award,
         args: {},
@@ -18838,6 +19475,23 @@ export namespace AwardResolvers {
             ctx: Context,
             info: GraphQLResolveInfo
           ) => AwardVT | null | Promise<AwardVT | null>;
+        };
+
+    winner:
+      | ((
+          parent: Award,
+          args: {},
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => User | null | Promise<User | null>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: Award,
+            args: {},
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => User | null | Promise<User | null>;
         };
 
     createdAt:
@@ -23078,6 +23732,13 @@ export namespace MutationResolvers {
     createdBy?: UserWhereUniqueInput | null;
   }
 
+  export interface ArgsCreateAnswer {
+    questionID?: string | null;
+    json_infor?: string | null;
+    createdBy?: string | null;
+    totalPoint?: number | null;
+  }
+
   export interface ArgsCreateChallenge {
     title: string;
     description: string;
@@ -23293,6 +23954,23 @@ export namespace MutationResolvers {
           ctx: Context,
           info: GraphQLResolveInfo
         ) => Question | Promise<Question>;
+      };
+
+  export type CreateAnswerResolver =
+    | ((
+        parent: undefined,
+        args: ArgsCreateAnswer,
+        ctx: Context,
+        info: GraphQLResolveInfo
+      ) => Answer | Promise<Answer>)
+    | {
+        fragment: string;
+        resolve: (
+          parent: undefined,
+          args: ArgsCreateAnswer,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Answer | Promise<Answer>;
       };
 
   export type CreateChallengeResolver =
@@ -24044,6 +24722,23 @@ export namespace MutationResolvers {
           ) => Question | Promise<Question>;
         };
 
+    createAnswer:
+      | ((
+          parent: undefined,
+          args: ArgsCreateAnswer,
+          ctx: Context,
+          info: GraphQLResolveInfo
+        ) => Answer | Promise<Answer>)
+      | {
+          fragment: string;
+          resolve: (
+            parent: undefined,
+            args: ArgsCreateAnswer,
+            ctx: Context,
+            info: GraphQLResolveInfo
+          ) => Answer | Promise<Answer>;
+        };
+
     createChallenge:
       | ((
           parent: undefined,
@@ -24777,226 +25472,6 @@ export namespace MutationResolvers {
   }
 }
 
-export namespace QuestionResolvers {
-  export const defaultResolvers = {
-    id: (parent: Question) => parent.id,
-    title: (parent: Question) =>
-      parent.title === undefined ? null : parent.title,
-    description: (parent: Question) =>
-      parent.description === undefined ? null : parent.description,
-    json_infor: (parent: Question) =>
-      parent.json_infor === undefined ? null : parent.json_infor,
-    createdAt: (parent: Question) =>
-      parent.createdAt === undefined ? null : parent.createdAt
-  };
-
-  export type IdResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => string | Promise<string>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | Promise<string>;
-      };
-
-  export type TitleResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => string | null | Promise<string | null>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>;
-      };
-
-  export type DescriptionResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => string | null | Promise<string | null>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>;
-      };
-
-  export type Json_inforResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => string | null | Promise<string | null>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>;
-      };
-
-  export type CreatedByResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => User | null | Promise<User | null>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => User | null | Promise<User | null>;
-      };
-
-  export type CreatedAtResolver =
-    | ((
-        parent: Question,
-        args: {},
-        ctx: Context,
-        info: GraphQLResolveInfo
-      ) => string | null | Promise<string | null>)
-    | {
-        fragment: string;
-        resolve: (
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>;
-      };
-
-  export interface Type {
-    id:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | Promise<string>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => string | Promise<string>;
-        };
-
-    title:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => string | null | Promise<string | null>;
-        };
-
-    description:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => string | null | Promise<string | null>;
-        };
-
-    json_infor:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => string | null | Promise<string | null>;
-        };
-
-    createdBy:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => User | null | Promise<User | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => User | null | Promise<User | null>;
-        };
-
-    createdAt:
-      | ((
-          parent: Question,
-          args: {},
-          ctx: Context,
-          info: GraphQLResolveInfo
-        ) => string | null | Promise<string | null>)
-      | {
-          fragment: string;
-          resolve: (
-            parent: Question,
-            args: {},
-            ctx: Context,
-            info: GraphQLResolveInfo
-          ) => string | null | Promise<string | null>;
-        };
-  }
-}
-
 export namespace AuthPayloadResolvers {
   export const defaultResolvers = {
     token: (parent: AuthPayload) => parent.token,
@@ -25311,6 +25786,8 @@ export interface Resolvers {
   Ipaq: IpaqResolvers.Type;
   IpaqAnswers: IpaqAnswersResolvers.Type;
   FavoriteActivity: FavoriteActivityResolvers.Type;
+  Question: QuestionResolvers.Type;
+  Answer: AnswerResolvers.Type;
   GroupColor: GroupColorResolvers.Type;
   Group: GroupResolvers.Type;
   Challenge: ChallengeResolvers.Type;
@@ -25323,7 +25800,6 @@ export interface Resolvers {
   BuddyMatch: BuddyMatchResolvers.Type;
   BuddyRequest: BuddyRequestResolvers.Type;
   Mutation: MutationResolvers.Type;
-  Question: QuestionResolvers.Type;
   AuthPayload: AuthPayloadResolvers.Type;
   Subscription: SubscriptionResolvers.Type;
 }

@@ -7,6 +7,9 @@ type Query {
   """ Gibt alle Informationen über einen Nutzer zurück (Token erforderlich) """
   getUser: User!
   ## query of van tinh
+  questions(where: QuestionWhereInput): [Question]!
+  getanswer(where: AnswerWhereInput): [Answer]!
+
   groupColors(where: GroupColorWhereInput): [GroupColor]
   groups(where: GroupWhereInput): [Group]!
   group(where: GroupWhereInput): Group!
@@ -109,6 +112,14 @@ type Mutation {
     json_infor: String
     createdBy: UserWhereUniqueInput
   ): Question!
+
+  ## add the answer for the question
+  createAnswer(
+    questionID: ID
+    json_infor: String
+    createdBy: ID
+    totalPoint: Int
+  ): Answer!
 
   ### New Challenge
   createChallenge(

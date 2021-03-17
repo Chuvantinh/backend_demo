@@ -8,6 +8,12 @@ export const Query: QueryResolvers.Type = {
   getUser: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },
+  questions: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
+  getanswer: (parent, args, ctx) => {
+    throw new Error("Resolver not implemented");
+  },
   groupColors: (parent, args, ctx) => {
     throw new Error("Resolver not implemented");
   },

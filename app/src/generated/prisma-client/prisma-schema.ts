@@ -586,8 +586,10 @@ type AggregateWebPushSettings {
 type Answer {
   id: ID!
   questionID: Question
-  createdBy: User
+  json_infor: String
+  totalPoint: Int
   createdAt: DateTime
+  createdBy: User
 }
 
 type AnswerConnection {
@@ -599,6 +601,8 @@ type AnswerConnection {
 input AnswerCreateInput {
   id: ID
   questionID: QuestionCreateOneInput
+  json_infor: String
+  totalPoint: Int
   createdBy: UserCreateOneInput
 }
 
@@ -610,12 +614,18 @@ type AnswerEdge {
 enum AnswerOrderByInput {
   id_ASC
   id_DESC
+  json_infor_ASC
+  json_infor_DESC
+  totalPoint_ASC
+  totalPoint_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
 type AnswerPreviousValues {
   id: ID!
+  json_infor: String
+  totalPoint: Int
   createdAt: DateTime
 }
 
@@ -639,7 +649,14 @@ input AnswerSubscriptionWhereInput {
 
 input AnswerUpdateInput {
   questionID: QuestionUpdateOneInput
+  json_infor: String
+  totalPoint: Int
   createdBy: UserUpdateOneInput
+}
+
+input AnswerUpdateManyMutationInput {
+  json_infor: String
+  totalPoint: Int
 }
 
 input AnswerWhereInput {
@@ -658,7 +675,28 @@ input AnswerWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   questionID: QuestionWhereInput
-  createdBy: UserWhereInput
+  json_infor: String
+  json_infor_not: String
+  json_infor_in: [String!]
+  json_infor_not_in: [String!]
+  json_infor_lt: String
+  json_infor_lte: String
+  json_infor_gt: String
+  json_infor_gte: String
+  json_infor_contains: String
+  json_infor_not_contains: String
+  json_infor_starts_with: String
+  json_infor_not_starts_with: String
+  json_infor_ends_with: String
+  json_infor_not_ends_with: String
+  totalPoint: Int
+  totalPoint_not: Int
+  totalPoint_in: [Int!]
+  totalPoint_not_in: [Int!]
+  totalPoint_lt: Int
+  totalPoint_lte: Int
+  totalPoint_gt: Int
+  totalPoint_gte: Int
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -667,6 +705,7 @@ input AnswerWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  createdBy: UserWhereInput
   AND: [AnswerWhereInput!]
   OR: [AnswerWhereInput!]
   NOT: [AnswerWhereInput!]
@@ -683,7 +722,7 @@ type Award {
   votingID: Voting
   createdBy: User
   status: AwardVT
-  winneruser: User
+  winner: User
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -701,7 +740,7 @@ input AwardCreateInput {
   votingID: VotingCreateOneInput
   createdBy: UserCreateOneInput
   status: AwardVT
-  winneruser: UserCreateOneInput
+  winner: UserCreateOneInput
 }
 
 type AwardEdge {
@@ -751,7 +790,7 @@ input AwardUpdateInput {
   votingID: VotingUpdateOneInput
   createdBy: UserUpdateOneInput
   status: AwardVT
-  winneruser: UserUpdateOneInput
+  winner: UserUpdateOneInput
 }
 
 input AwardUpdateManyMutationInput {
@@ -787,7 +826,7 @@ input AwardWhereInput {
   status_not: AwardVT
   status_in: [AwardVT!]
   status_not_in: [AwardVT!]
-  winneruser: UserWhereInput
+  winner: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -5102,6 +5141,7 @@ type Mutation {
   deleteManyActivities(where: ActivityWhereInput): BatchPayload!
   createAnswer(data: AnswerCreateInput!): Answer!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
+  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!

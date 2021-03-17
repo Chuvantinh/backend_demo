@@ -868,6 +868,10 @@ export interface Prisma {
     data: AnswerUpdateInput;
     where: AnswerWhereUniqueInput;
   }) => AnswerPromise;
+  updateManyAnswers: (args: {
+    data: AnswerUpdateManyMutationInput;
+    where?: AnswerWhereInput;
+  }) => BatchPayloadPromise;
   upsertAnswer: (args: {
     where: AnswerWhereUniqueInput;
     create: AnswerCreateInput;
@@ -1807,6 +1811,10 @@ export type CalendarEntryOrderByInput =
 export type AnswerOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "json_infor_ASC"
+  | "json_infor_DESC"
+  | "totalPoint_ASC"
+  | "totalPoint_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC";
 
@@ -3256,7 +3264,28 @@ export interface AnswerWhereInput {
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
   questionID?: Maybe<QuestionWhereInput>;
-  createdBy?: Maybe<UserWhereInput>;
+  json_infor?: Maybe<String>;
+  json_infor_not?: Maybe<String>;
+  json_infor_in?: Maybe<String[] | String>;
+  json_infor_not_in?: Maybe<String[] | String>;
+  json_infor_lt?: Maybe<String>;
+  json_infor_lte?: Maybe<String>;
+  json_infor_gt?: Maybe<String>;
+  json_infor_gte?: Maybe<String>;
+  json_infor_contains?: Maybe<String>;
+  json_infor_not_contains?: Maybe<String>;
+  json_infor_starts_with?: Maybe<String>;
+  json_infor_not_starts_with?: Maybe<String>;
+  json_infor_ends_with?: Maybe<String>;
+  json_infor_not_ends_with?: Maybe<String>;
+  totalPoint?: Maybe<Int>;
+  totalPoint_not?: Maybe<Int>;
+  totalPoint_in?: Maybe<Int[] | Int>;
+  totalPoint_not_in?: Maybe<Int[] | Int>;
+  totalPoint_lt?: Maybe<Int>;
+  totalPoint_lte?: Maybe<Int>;
+  totalPoint_gt?: Maybe<Int>;
+  totalPoint_gte?: Maybe<Int>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -3265,6 +3294,7 @@ export interface AnswerWhereInput {
   createdAt_lte?: Maybe<DateTimeInput>;
   createdAt_gt?: Maybe<DateTimeInput>;
   createdAt_gte?: Maybe<DateTimeInput>;
+  createdBy?: Maybe<UserWhereInput>;
   AND?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
   OR?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
   NOT?: Maybe<AnswerWhereInput[] | AnswerWhereInput>;
@@ -3645,7 +3675,7 @@ export interface AwardWhereInput {
   status_not?: Maybe<AwardVT>;
   status_in?: Maybe<AwardVT[] | AwardVT>;
   status_not_in?: Maybe<AwardVT[] | AwardVT>;
-  winneruser?: Maybe<UserWhereInput>;
+  winner?: Maybe<UserWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -4739,6 +4769,8 @@ export interface ActivityUpdateManyMutationInput {
 export interface AnswerCreateInput {
   id?: Maybe<ID_Input>;
   questionID?: Maybe<QuestionCreateOneInput>;
+  json_infor?: Maybe<String>;
+  totalPoint?: Maybe<Int>;
   createdBy?: Maybe<UserCreateOneInput>;
 }
 
@@ -5091,6 +5123,8 @@ export interface CalendarEntryCreateWithoutPatientInput {
 
 export interface AnswerUpdateInput {
   questionID?: Maybe<QuestionUpdateOneInput>;
+  json_infor?: Maybe<String>;
+  totalPoint?: Maybe<Int>;
   createdBy?: Maybe<UserUpdateOneInput>;
 }
 
@@ -6659,6 +6693,11 @@ export interface QuestionUpsertNestedInput {
   create: QuestionCreateInput;
 }
 
+export interface AnswerUpdateManyMutationInput {
+  json_infor?: Maybe<String>;
+  totalPoint?: Maybe<Int>;
+}
+
 export interface AwardCreateInput {
   id?: Maybe<ID_Input>;
   challengeID?: Maybe<ChallengeCreateOneInput>;
@@ -6666,7 +6705,7 @@ export interface AwardCreateInput {
   votingID?: Maybe<VotingCreateOneInput>;
   createdBy?: Maybe<UserCreateOneInput>;
   status?: Maybe<AwardVT>;
-  winneruser?: Maybe<UserCreateOneInput>;
+  winner?: Maybe<UserCreateOneInput>;
 }
 
 export interface ChallengeCreateOneInput {
@@ -6757,7 +6796,7 @@ export interface AwardUpdateInput {
   votingID?: Maybe<VotingUpdateOneInput>;
   createdBy?: Maybe<UserUpdateOneInput>;
   status?: Maybe<AwardVT>;
-  winneruser?: Maybe<UserUpdateOneInput>;
+  winner?: Maybe<UserUpdateOneInput>;
 }
 
 export interface ChallengeUpdateOneInput {
@@ -9305,14 +9344,18 @@ export interface AggregateActivitySubscription
 
 export interface Answer {
   id: ID_Output;
+  json_infor?: String;
+  totalPoint?: Int;
   createdAt?: DateTimeOutput;
 }
 
 export interface AnswerPromise extends Promise<Answer>, Fragmentable {
   id: () => Promise<ID_Output>;
   questionID: <T = QuestionPromise>() => T;
-  createdBy: <T = UserPromise>() => T;
+  json_infor: () => Promise<String>;
+  totalPoint: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
 }
 
 export interface AnswerSubscription
@@ -9320,8 +9363,10 @@ export interface AnswerSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   questionID: <T = QuestionSubscription>() => T;
-  createdBy: <T = UserSubscription>() => T;
+  json_infor: () => Promise<AsyncIterator<String>>;
+  totalPoint: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdBy: <T = UserSubscription>() => T;
 }
 
 export interface AnswerNullablePromise
@@ -9329,8 +9374,10 @@ export interface AnswerNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   questionID: <T = QuestionPromise>() => T;
-  createdBy: <T = UserPromise>() => T;
+  json_infor: () => Promise<String>;
+  totalPoint: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
+  createdBy: <T = UserPromise>() => T;
 }
 
 export interface Question {
@@ -10434,7 +10481,7 @@ export interface AwardPromise extends Promise<Award>, Fragmentable {
   votingID: <T = VotingPromise>() => T;
   createdBy: <T = UserPromise>() => T;
   status: () => Promise<AwardVT>;
-  winneruser: <T = UserPromise>() => T;
+  winner: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -10448,7 +10495,7 @@ export interface AwardSubscription
   votingID: <T = VotingSubscription>() => T;
   createdBy: <T = UserSubscription>() => T;
   status: () => Promise<AsyncIterator<AwardVT>>;
-  winneruser: <T = UserSubscription>() => T;
+  winner: <T = UserSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -10462,7 +10509,7 @@ export interface AwardNullablePromise
   votingID: <T = VotingPromise>() => T;
   createdBy: <T = UserPromise>() => T;
   status: () => Promise<AwardVT>;
-  winneruser: <T = UserPromise>() => T;
+  winner: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -13454,6 +13501,8 @@ export interface AnswerSubscriptionPayloadSubscription
 
 export interface AnswerPreviousValues {
   id: ID_Output;
+  json_infor?: String;
+  totalPoint?: Int;
   createdAt?: DateTimeOutput;
 }
 
@@ -13461,6 +13510,8 @@ export interface AnswerPreviousValuesPromise
   extends Promise<AnswerPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  json_infor: () => Promise<String>;
+  totalPoint: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -13468,6 +13519,8 @@ export interface AnswerPreviousValuesSubscription
   extends Promise<AsyncIterator<AnswerPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  json_infor: () => Promise<AsyncIterator<String>>;
+  totalPoint: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 

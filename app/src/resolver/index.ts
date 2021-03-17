@@ -34,7 +34,8 @@ import { CategoryQueryResolver} from "./Category.resolver";
 import { ContributionQueryResolver, ContributionMutationResolver} from "./Contribution";
 import { VotingQueryResolver,VotingMutationResolver} from "./Voting";
 import { AwardQueryResolver, AwardMutationResolver} from "./Award";
-import { QuestionMutationResolver} from "./Question.resolver";
+import { QuestionQueryResolver, QuestionMutationResolver} from "./Question.resolver";
+import { AnswerQueryResolver, AnswerMutationResolver} from "./Answer.resolver";
 // van tinh nested
 import { Challenge} from "./nested/Challenge";
 import { GroupColor} from "./nested/GroupColor";
@@ -44,6 +45,7 @@ import { Contribution } from "./nested/Contribution";
 import { Voting } from "./nested/Voting";
 import { Award } from "./nested/Award";
 import { Question } from "./nested/Question";
+import { Answer } from "./nested/Answer";
 
 
 // generated default Resolvers - no need to implement as there are no nested non-scalar fields
@@ -110,7 +112,8 @@ const Query: QueryResolvers.Type = {
     ...ContributionQueryResolver,
     ...VotingQueryResolver,
     ...AwardQueryResolver,
-    //...QuestionQueryResolver
+    ...QuestionQueryResolver,
+    ...AnswerQueryResolver
 }
 
 const Mutation: MutationResolvers.Type = {
@@ -126,7 +129,8 @@ const Mutation: MutationResolvers.Type = {
     ...ContributionMutationResolver,
     ...VotingMutationResolver,
     ...AwardMutationResolver,
-    ...QuestionMutationResolver
+    ...QuestionMutationResolver,
+    ...AnswerMutationResolver
 }
 
 const Subscription: SubscriptionResolvers.Type = {
@@ -178,5 +182,6 @@ export const resolvers: Resolvers = {
     Contribution,
     Voting,
     Award,
-    Question
+    Question,
+    Answer
 }
